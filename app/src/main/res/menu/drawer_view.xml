@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group>
+        <item
+            android:id="@+id/home_btn"
+            android:enabled="true"
+            android:title="@string/home"/>
+        <item
+            android:id="@+id/workouts_history_btn"
+            android:enabled="true"
+            android:title="@string/workouts_history"/>
+        <item
+            android:id="@+id/workout_list_btn"
+            android:enabled="true"
+            android:title="@string/workout_s_list"/>
+        <item
+            android:id="@+id/settings_btn"
+            android:enabled="true"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/info"
+            android:enabled="true"
+            android:title="@string/info" />
+    </group>
+</menu>
