@@ -1,11 +1,12 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.jetbrains.anko.image
+import net.trasim.workoutinwork.objects.Exercise
+import net.trasim.workoutinwork.R
 
 class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>) : RecyclerView.Adapter<ExercisesRecycleAdapter.MyViewHolder>() {
 

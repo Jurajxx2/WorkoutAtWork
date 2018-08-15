@@ -1,14 +1,14 @@
-package net.trasim.workoutinwork.Database
+package net.trasim.workoutinwork.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 
-import net.trasim.workoutinwork.Exercise
-import net.trasim.workoutinwork.User
-import net.trasim.workoutinwork.Workday
-import net.trasim.workoutinwork.Workout
+import net.trasim.workoutinwork.objects.Exercise
+import net.trasim.workoutinwork.objects.User
+import net.trasim.workoutinwork.objects.Workday
+import net.trasim.workoutinwork.objects.Workout
 
 @Database(entities = arrayOf(User::class, Workday::class, Workout::class, Exercise::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {

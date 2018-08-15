@@ -11,7 +11,8 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
-import net.trasim.workoutinwork.Database.AppDatabase
+import net.trasim.workoutinwork.adapters.ExercisesRecycleAdapter
+import net.trasim.workoutinwork.database.AppDatabase
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 

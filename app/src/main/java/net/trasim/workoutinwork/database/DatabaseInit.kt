@@ -1,13 +1,13 @@
-package net.trasim.workoutinwork.Database
+package net.trasim.workoutinwork.database
 
 import android.app.Activity
-import net.trasim.workoutinwork.Exercise
-import net.trasim.workoutinwork.Workday
-import net.trasim.workoutinwork.Workout
+import net.trasim.workoutinwork.objects.Exercise
+import net.trasim.workoutinwork.objects.Workday
+import net.trasim.workoutinwork.objects.Workout
 
 var exercises: ArrayList<Exercise> = ArrayList(20)
 var initialWorkout: Workout = Workout(0)
-var initialWorkday: Workday = Workday("0",0,0,0)
+var initialWorkday: Workday = Workday("0", 0, 0, 0)
 
 class DatabaseInit {
 

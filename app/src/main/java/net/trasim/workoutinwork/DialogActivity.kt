@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import net.trasim.workoutinwork.Database.AppDatabase
+import net.trasim.workoutinwork.database.AppDatabase
+import net.trasim.workoutinwork.objects.User
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import java.util.*
@@ -53,7 +54,7 @@ class DialogActivity : Activity() {
             }
 
             doAsync {
-                val user = User(Integer.valueOf(weight.text.toString()), Integer.valueOf(height.text.toString()), Calendar.YEAR - age.selectedItemPosition, gender.selectedItem.toString())
+                val user = User(Integer.valueOf(weight.text.toString()), Integer.valueOf(height.text.toString()), Calendar.YEAR - age.selectedItemPosition, gender.selectedItem.toString(), 3, "en", "", "", "false", 120, 0)
                 AppDatabase.getInstance(this@DialogActivity).userModel().insertUser(user)
             }
 
@@ -62,6 +63,10 @@ class DialogActivity : Activity() {
             finish()
         }
 
-        later!!.setOnClickListener { finish() }
+        later!!.setOnClickListener {
+            val intent = Intent(this@DialogActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

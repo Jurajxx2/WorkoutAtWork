@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.decorators
 
 import android.graphics.Typeface
 import android.text.style.RelativeSizeSpan

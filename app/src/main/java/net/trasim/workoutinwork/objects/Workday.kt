@@ -1,12 +1,9 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.objects
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
-
-import java.util.ArrayList
-import java.util.Date
 
 @Entity(tableName = "Workdays")
 class Workday {
@@ -25,9 +22,6 @@ class Workday {
 
     @ColumnInfo(name = "workoutsNo")
     var workouts: Int = 0
-
-    @ColumnInfo(name = "minutes")
-    var minutesDone: Int = 0
 
     @ColumnInfo(name = "workoutsSum")
     var workoutsDone: Int = 0

@@ -7,13 +7,18 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
+import android.transition.Visibility
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import net.trasim.workoutinwork.Database.AppDatabase
-import net.trasim.workoutinwork.Database.exercises
+import net.trasim.workoutinwork.database.AppDatabase
+import net.trasim.workoutinwork.objects.Exercise
+import net.trasim.workoutinwork.objects.User
+import net.trasim.workoutinwork.objects.Workday
+import net.trasim.workoutinwork.objects.Workout
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.*
 
@@ -23,9 +28,13 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var mWorkout: Workout
     private lateinit var exercises: List<Exercise>
     private lateinit var lastWorkday: Workday
+    private lateinit var user: User
 
     private lateinit var buttonNext: Button
     private lateinit var buttonFinish: Button
+
+    private var exercisesInWorkout: Int = 3
+    private var exercisesDone: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +43,15 @@ class WorkoutActivity : AppCompatActivity() {
         doAsync {
             exercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().allExercises
             lastWorkday = AppDatabase.getInstance(this@WorkoutActivity).workdayModel().getLastWorkday()
+            user = AppDatabase.getInstance(this@WorkoutActivity).userModel().getUserByID(1)
+            if (user.reminder=="true"){
+                user.nextReminder = System.currentTimeMillis()
+            }
+            AppDatabase.getInstance(this@WorkoutActivity).userModel().updateUser(user)
+            uiThread {
+                nextExercise()
+            }
         }
-        nextExercise()
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
         buttonNext = findViewById(R.id.buttonNext)
@@ -93,19 +109,24 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     private fun nextExercise(){
+        exercisesDone++
+        val randomNr = (1..12).random()
         doAsync{
             lastWorkday.workouts ++
             AppDatabase.getInstance(this@WorkoutActivity).workdayModel().updateWorkday(lastWorkday)
             mWorkout = Workout(lastWorkday.id)
-            mWorkout.exerciseID = (1..13).random()
+            mWorkout.exerciseID = randomNr
             AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
             uiThread {
-                updateUI()
+                updateUI(randomNr)
             }
         }
     }
 
-    private fun updateUI(){
+    private fun updateUI(randomNr: Int){
+        if (exercisesDone==exercisesInWorkout){
+            buttonNext.visibility = View.INVISIBLE
+        }
         val title: TextView = findViewById(R.id.exerciseName)
         val description: TextView = findViewById(R.id.exerciseDescription)
         val img: pl.droidsonroids.gif.GifImageView = findViewById(R.id.exerciseGif)
@@ -115,7 +136,7 @@ class WorkoutActivity : AppCompatActivity() {
         val exercise = database.exerciseModel().getExerciseByID(mWorkout.exerciseID)
             uiThread {
                 title.text = exercise.name
-
+                toast(randomNr.toString())
                 when(exercise.img){
                     "pushup" -> img.setImageResource(R.drawable.pushup)
                     "jacks" -> img.setImageResource(R.drawable.jacks)

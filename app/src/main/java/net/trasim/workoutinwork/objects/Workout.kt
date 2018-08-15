@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.objects
 
 
 import android.arch.persistence.room.ColumnInfo

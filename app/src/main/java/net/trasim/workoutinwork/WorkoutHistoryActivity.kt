@@ -8,17 +8,19 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
-import android.widget.DatePicker
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
-import kotlinx.android.synthetic.main.activity_workout_history.*
-import net.trasim.workoutinwork.Database.AppDatabase
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
+import net.trasim.workoutinwork.adapters.ExercisesRecycleAdapter
+import net.trasim.workoutinwork.adapters.WorkoutsRecycleAdapter
+import net.trasim.workoutinwork.database.AppDatabase
+import net.trasim.workoutinwork.decorators.EventDecorator
+import net.trasim.workoutinwork.decorators.OneDayDecorator
+import net.trasim.workoutinwork.objects.Workday
+import org.jetbrains.anko.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,10 +59,11 @@ class WorkoutHistoryActivity : AppCompatActivity() {
                 val c = Calendar.getInstance()
                 c.timeInMillis = workday.date!!.toLong()
                 if (CalendarDay.from(c) == calendarDay){
-                    alert {
-                        title = workday.end.toString()
-                        message = System.currentTimeMillis().toString()
-                    }.show()
+
+                    val intent = Intent(this, WorkdayReportActivity::class.java)
+                    intent.putExtra("workdayID", workday.id)
+                    startActivity(intent)
+
                     return@setOnDateChangedListener
                 }
             }

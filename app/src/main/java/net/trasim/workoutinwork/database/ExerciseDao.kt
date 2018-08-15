@@ -1,17 +1,12 @@
-package net.trasim.workoutinwork.Database
+package net.trasim.workoutinwork.database
 
-import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 
-import net.trasim.workoutinwork.Exercise
-
-import java.util.ArrayList
-
-import android.arch.persistence.room.OnConflictStrategy.IGNORE
+import net.trasim.workoutinwork.objects.Exercise
 
 @Dao
 interface ExerciseDao {

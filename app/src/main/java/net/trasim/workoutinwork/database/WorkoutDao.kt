@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork.Database
+package net.trasim.workoutinwork.database
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
@@ -6,9 +6,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 
-import net.trasim.workoutinwork.Workout
-
-import java.util.ArrayList
+import net.trasim.workoutinwork.objects.Workout
 
 @Dao
 interface WorkoutDao {
@@ -17,6 +15,9 @@ interface WorkoutDao {
 
     @Query("SELECT * FROM Workouts where id = :id")
     fun getWorkoutByID(id: Int): Workout
+
+    @Query("SELECT * FROM Workouts where workdayID = :workdayID")
+    fun getWorkoutsByWorkdayID(workdayID: Int): List<Workout>
 
     @Insert
     fun insertWorkout(Workout: Workout)

@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.decorators
 
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import com.prolificinteractive.materialcalendarview.DayViewFacade

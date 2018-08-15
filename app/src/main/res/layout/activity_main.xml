@@ -30,23 +30,24 @@
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Time to next workout"
+                android:layout_marginTop="8dp"
+                android:text="Next reminder"
                 android:textAllCaps="true"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startWorkout" />
+                app:layout_constraintTop_toBottomOf="@+id/startDay" />
 
             <TextView
-                android:id="@+id/textView22"
-                android:layout_width="wrap_content"
+                android:id="@+id/nextAlarm"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="00:25:33"
+                android:text="_ _ : _ _"
+                android:textAlignment="center"
                 android:textSize="36sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/skipWorkout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -55,90 +56,72 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Time to working day's end"
+                android:text="Reminder interval"
                 android:textAllCaps="true"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                app:layout_constraintTop_toBottomOf="@+id/nextAlarm" />
 
             <TextView
-                android:id="@+id/textView24"
-                android:layout_width="wrap_content"
+                android:id="@+id/reminderInterval"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="03:44:02"
+                android:text="_ _ : _ _"
+                android:textAlignment="center"
                 android:textSize="36sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/setInterval"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/skipWorkout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:background="@color/colorPrimaryDark"
-                android:text="+5 min"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="SKIP workout"
                 android:textColor="@color/colorBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/textView22"
-                app:layout_constraintStart_toEndOf="@+id/textView22"
-                app:layout_constraintTop_toTopOf="@+id/textView22" />
+                app:layout_constraintBottom_toBottomOf="@+id/nextAlarm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/nextAlarm"
+                app:layout_constraintTop_toTopOf="@+id/nextAlarm" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/setInterval"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:background="@color/colorPrimaryDark"
-                android:text="+15 min"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="Set interval"
                 android:textColor="@color/colorBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/textView24"
-                app:layout_constraintStart_toEndOf="@+id/textView24"
-                app:layout_constraintTop_toTopOf="@+id/textView24" />
+                app:layout_constraintBottom_toBottomOf="@+id/reminderInterval"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/reminderInterval"
+                app:layout_constraintTop_toTopOf="@+id/reminderInterval" />
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@color/colorPrimaryDark"
-                android:text="-15 min"
-                android:textColor="@color/colorBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/textView24"
-                app:layout_constraintEnd_toStartOf="@+id/textView24"
-                app:layout_constraintTop_toTopOf="@+id/textView24"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@color/colorPrimaryDark"
-                android:text="-5 min"
-                android:textColor="@color/colorBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/textView22"
-                app:layout_constraintEnd_toStartOf="@+id/textView22"
-                app:layout_constraintTop_toTopOf="@+id/textView22" />
 
             <Button
                 android:id="@+id/startDay"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/colorPrimaryDark"
-                android:text="Start workday session"
+                android:text="Enable Reminder"
                 android:textAlignment="center"
                 android:textColor="@color/colorBackground"
-                android:textSize="30sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/button"
+                app:layout_constraintTop_toBottomOf="@+id/startWorkout" />
 
             <Button
                 android:id="@+id/startWorkout"
@@ -146,7 +129,7 @@
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="70dp"
                 android:background="@color/colorPrimaryDark"
                 android:text="Start workout"
                 android:textAlignment="center"
@@ -155,7 +138,24 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startDay" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="FINISH FOR TODAY"
+                android:textAlignment="center"
+                android:textColor="@color/colorBackground"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/startDay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/startWorkout" />
 
         </android.support.constraint.ConstraintLayout>
 
