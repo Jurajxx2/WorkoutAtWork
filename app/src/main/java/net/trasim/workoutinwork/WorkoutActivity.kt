@@ -1,8 +1,13 @@
 package net.trasim.workoutinwork
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -22,40 +27,75 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.*
 
+
 class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mWorkout: Workout
     private lateinit var exercises: List<Exercise>
     private lateinit var lastWorkday: Workday
-    private lateinit var user: User
 
     private lateinit var buttonNext: Button
     private lateinit var buttonFinish: Button
+    private lateinit var buttonEnd: Button
+    private lateinit var countdownButton: Button
 
-    private var exercisesInWorkout: Int = 3
+    private lateinit var countdownTimer: TextView
+    private lateinit var title: TextView
+    private lateinit var description: TextView
+    private lateinit var img: pl.droidsonroids.gif.GifImageView
+
+    private var exercisesInWorkout: Int = 0
     private var exercisesDone: Int = 0
+
+    private lateinit var sharedPref: SharedPreferences
+
+    private var weight: Float = 0.toFloat()
+    private var height: Float = 0.toFloat()
+    private var isOK: Boolean = false
+    private var workoutReminderInterval: Long = 0
+    private var workoutNextReminder: Long = 0
+    private var reminder: Boolean = false
+    private var countdown: Long = 0
+
+    private lateinit var timer: CountDownTimer2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
 
+        title = findViewById(R.id.exerciseName)
+        description = findViewById(R.id.exerciseDescription)
+        img = findViewById(R.id.exerciseGif)
+        mDrawerLayout = findViewById(R.id.drawer_layout)
+        countdownTimer = findViewById(R.id.countdownTimer)
+
+        buttonNext = findViewById(R.id.buttonNext)
+        buttonFinish = findViewById(R.id.buttonFinish)
+        buttonEnd = findViewById(R.id.buttonEnd)
+        countdownButton = findViewById(R.id.countdownButton)
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        weight = sharedPref.getString("weight", "0").toFloat()
+        height = sharedPref.getString("height", "0").toFloat()
+        isOK = sharedPref.getBoolean("isOK", false)
+        workoutReminderInterval = sharedPref.getString("reminder_interval", "7200000").toLong()
+        workoutNextReminder = sharedPref.getLong("next_interval", 0)
+        reminder = sharedPref.getBoolean("workout_reminder", false)
+        exercisesInWorkout = sharedPref.getString("noOfExercises", "4").toInt()
+
+        if (reminder){
+            workoutNextReminder = System.currentTimeMillis()
+            saveSharedPref()
+        }
+
         doAsync {
             exercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().allExercises
             lastWorkday = AppDatabase.getInstance(this@WorkoutActivity).workdayModel().getLastWorkday()
-            user = AppDatabase.getInstance(this@WorkoutActivity).userModel().getUserByID(1)
-            if (user.reminder=="true"){
-                user.nextReminder = System.currentTimeMillis()
-            }
-            AppDatabase.getInstance(this@WorkoutActivity).userModel().updateUser(user)
             uiThread {
                 nextExercise()
             }
         }
-
-        mDrawerLayout = findViewById(R.id.drawer_layout)
-        buttonNext = findViewById(R.id.buttonNext)
-        buttonFinish = findViewById(R.id.buttonFinish)
 
         val toolbar: android.support.v7.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -100,69 +140,111 @@ class WorkoutActivity : AppCompatActivity() {
         }
 
         buttonNext.setOnClickListener{
-            nextExercise()
+            if (exercisesDone==exercisesInWorkout){
+                finish()
+
+            } else {
+                if (countdownButton.visibility == View.VISIBLE || countdownTimer.visibility == View.VISIBLE){
+                    countdownButton.visibility = View.GONE
+                    countdownTimer.visibility = View.GONE
+                }
+                nextExercise()
+            }
         }
 
         buttonFinish.setOnClickListener {
+            if (reminder) {
+                val alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val intent = Intent(this, MyBroadcastReceiver::class.java)
+                val alarmIntent = PendingIntent.getBroadcast(this.applicationContext, 0, intent, 0)
+
+                alarmMgr.cancel(alarmIntent)
+                saveSharedPref()
+            }
             finish()
+        }
+
+        buttonEnd.setOnClickListener {
+            finish()
+        }
+
+        countdownButton.setOnClickListener {
+            when {
+                timer.timeLeft()>0 -> timer.pause()
+                timer.isPaused -> timer.resume()
+                else -> timer.create()
+            }
         }
     }
 
     private fun nextExercise(){
         exercisesDone++
-        val randomNr = (1..12).random()
         doAsync{
+            val enabledExercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().getEnabledExercises()
+
+            if (enabledExercises.isEmpty()){
+                toast("Please, enable at least one exercise in order to start workout")
+                finish()
+            }
+            val randomNr = (0 until enabledExercises.size).random()
+
             lastWorkday.workouts ++
             AppDatabase.getInstance(this@WorkoutActivity).workdayModel().updateWorkday(lastWorkday)
             mWorkout = Workout(lastWorkday.id)
-            mWorkout.exerciseID = randomNr
+            mWorkout.exerciseID = enabledExercises[randomNr].id
             AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
             uiThread {
-                updateUI(randomNr)
+                updateUI(enabledExercises[randomNr])
             }
         }
     }
 
-    private fun updateUI(randomNr: Int){
+    private fun updateUI(exercise: Exercise){
         if (exercisesDone==exercisesInWorkout){
             buttonNext.visibility = View.INVISIBLE
         }
-        val title: TextView = findViewById(R.id.exerciseName)
-        val description: TextView = findViewById(R.id.exerciseDescription)
-        val img: pl.droidsonroids.gif.GifImageView = findViewById(R.id.exerciseGif)
 
-        doAsync {
-        val database = AppDatabase.getInstance(this@WorkoutActivity)
-        val exercise = database.exerciseModel().getExerciseByID(mWorkout.exerciseID)
-            uiThread {
-                title.text = exercise.name
-                toast(randomNr.toString())
-                when(exercise.img){
-                    "pushup" -> img.setImageResource(R.drawable.pushup)
-                    "jacks" -> img.setImageResource(R.drawable.jacks)
-                    "leftplank" -> img.setImageResource(R.drawable.leftplank)
-                    "lunge" -> img.setImageResource(R.drawable.lunge)
-                    "plank" -> img.setImageResource(R.drawable.plank)
-                    "rightplank" -> img.setImageResource(R.drawable.rightplank)
-                    "rotation" -> img.setImageResource(R.drawable.rotation)
-                    "running" -> img.setImageResource(R.drawable.runnung)
-                    "squat" -> img.setImageResource(R.drawable.squat)
-                    "stepup" -> img.setImageResource(R.drawable.stepup)
-                    "triceps" -> img.setImageResource(R.drawable.triceps)
-                    "wallsit" -> img.setImageResource(R.drawable.wallsit)
-                    "abcrunch" -> img.setImageResource(R.drawable.abcrunch)
-                    else -> img.setImageResource(R.drawable.coffee)
-                }
-
-                var popis = ""
-                if (exercise.duration>0){
-                    popis = "\nDo it for " + exercise.duration.toString() + " seconds"
-                } else if (exercise.repetitions>0){
-                    popis = "\nDo it " + exercise.repetitions.toString() + " times"
-                }
-                description.text = exercise.heading + popis
-            }
+        title.text = exercise.name
+        when(exercise.img){
+            "pushup" -> img.setImageResource(R.drawable.pushup)
+            "jacks" -> img.setImageResource(R.drawable.jacks)
+            "leftplank" -> img.setImageResource(R.drawable.leftplank)
+            "lunge" -> img.setImageResource(R.drawable.lunge)
+            "plank" -> img.setImageResource(R.drawable.plank)
+            "rightplank" -> img.setImageResource(R.drawable.rightplank)
+            "rotation" -> img.setImageResource(R.drawable.rotation)
+            "running" -> img.setImageResource(R.drawable.runnung)
+            "squat" -> img.setImageResource(R.drawable.squat)
+            "stepup" -> img.setImageResource(R.drawable.stepup)
+            "triceps" -> img.setImageResource(R.drawable.triceps)
+            "wallsit" -> img.setImageResource(R.drawable.wallsit)
+            "abcrunch" -> img.setImageResource(R.drawable.abcrunch)
+            else -> img.setImageResource(R.drawable.coffee)
         }
+
+        var popis = ""
+        if (exercise.duration>0){
+            popis = "\nDo it for " + exercise.duration.toString() + " seconds"
+            countdownButton.visibility = View.VISIBLE
+            countdownTimer.visibility = View.VISIBLE
+
+            countdown = (exercise.duration * 1000).toLong()
+
+            timer = object : CountDownTimer2(countdown, 1000, true) {
+
+                override fun onTick(millisUntilFinished: Long) {
+                    countdownTimer.text = (millisUntilFinished/1000).toString() + "s"
+                }
+
+                override fun onFinish() {
+                    countdownTimer.text = "0s"
+                }
+            }
+
+        } else if (exercise.repetitions>0){
+            popis = "\nDo it " + exercise.repetitions.toString() + " times"
+        }
+        description.text = exercise.heading + popis
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -172,6 +254,16 @@ class WorkoutActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun saveSharedPref(){
+        with(sharedPref.edit()){
+            putBoolean("isOK", isOK)
+            putBoolean("workout_reminder", reminder)
+            putLong("remind_interval", workoutReminderInterval)
+            putLong("next_interval", workoutNextReminder)
+            apply()
         }
     }
 }

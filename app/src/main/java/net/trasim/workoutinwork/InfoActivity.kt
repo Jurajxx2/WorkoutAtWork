@@ -8,14 +8,24 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 
 class InfoActivity : AppCompatActivity() {
 
+    private lateinit var finish: Button
+    private lateinit var settings: Button
     private lateinit var mDrawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_info)
+        setContentView(R.layout.activity_dialog2)
+
+        finish = findViewById(R.id.finishBtn)
+        settings = findViewById(R.id.settingsBtn)
+
+        finish.visibility = View.INVISIBLE
+        settings.visibility = View.INVISIBLE
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -40,22 +50,27 @@ class InfoActivity : AppCompatActivity() {
                 R.id.home_btn -> {
                     var intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.workouts_history_btn -> {
                     var intent = Intent(this, WorkoutHistoryActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.settings_btn -> {
                     var intent = Intent(this, SettingsActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.workout_list_btn -> {
                     var intent = Intent(this, WorkoutListActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.info -> {
                     var intent = Intent(this, InfoActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
 

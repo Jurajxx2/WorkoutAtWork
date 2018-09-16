@@ -17,8 +17,6 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
         var title: TextView = view.findViewById(R.id.workoutName)
         var done: TextView = view.findViewById(R.id.done)
         var repetitions: TextView = view.findViewById(R.id.repetitions)
-        var calories: TextView = view.findViewById(R.id.calories)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -33,7 +31,6 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
         val exercise = exercises[workout.exerciseID]
 
         holder.title.text = exercise.name
-        holder.calories.text = workout.calories.toString()
         holder.repetitions.text = workout.done.toString()
         if (exercise.duration>0){
             holder.done.text = "Duration: "

@@ -14,6 +14,7 @@ import android.view.MenuItem
 import net.trasim.workoutinwork.adapters.ExercisesRecycleAdapter
 import net.trasim.workoutinwork.database.AppDatabase
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class WorkoutListActivity : AppCompatActivity() {
@@ -73,7 +74,7 @@ class WorkoutListActivity : AppCompatActivity() {
             val exercises = database.exerciseModel().allExercises
             uiThread {
                 var recyclerView = findViewById<RecyclerView>(R.id.exercisesList)
-                var mAdapter = ExercisesRecycleAdapter(exercises)
+                var mAdapter = ExercisesRecycleAdapter(exercises, this@WorkoutListActivity)
                 val mLayoutManager = LinearLayoutManager(applicationContext)
                 recyclerView!!.layoutManager = mLayoutManager
                 recyclerView!!.itemAnimator = DefaultItemAnimator()

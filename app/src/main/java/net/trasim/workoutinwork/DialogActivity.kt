@@ -2,7 +2,9 @@ package net.trasim.workoutinwork
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
@@ -23,11 +25,13 @@ class DialogActivity : Activity() {
     private lateinit var weight: EditText
     private lateinit var height: EditText
 
-    private lateinit var user : User
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dialog)
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
 
         next = findViewById(R.id.nextBtn)
         later = findViewById(R.id.laterBtn)
@@ -39,7 +43,7 @@ class DialogActivity : Activity() {
         height = findViewById(R.id.setHeight)
 
         next!!.setOnClickListener {
-            if (weight.text.isEmpty() || height.text.isEmpty() || age.selectedItemPosition==0 || gender.selectedItemPosition==0){
+            if (weight.text.isEmpty() || height.text.isEmpty() || age.selectedItemPosition==0 || gender.selectedItemPosition==-1){
                 toast("Please, fill all fields")
                 return@setOnClickListener
             }
@@ -53,9 +57,15 @@ class DialogActivity : Activity() {
                 return@setOnClickListener
             }
 
-            doAsync {
-                val user = User(Integer.valueOf(weight.text.toString()), Integer.valueOf(height.text.toString()), Calendar.YEAR - age.selectedItemPosition, gender.selectedItem.toString(), 3, "en", "", "", "false", 120, 0)
-                AppDatabase.getInstance(this@DialogActivity).userModel().insertUser(user)
+            with(sharedPref.edit()){
+                putBoolean("isOK", true)
+                putString("gender", gender.selectedItem.toString())
+                putString("weight", weight.text.toString())
+                putString("height", height.text.toString())
+                putString("age", age.selectedItem.toString())
+                putBoolean("reminder", false)
+                putString("reminder_interval", "7200000")
+                apply()
             }
 
             val intent = Intent(this@DialogActivity, DialogActivity2::class.java)

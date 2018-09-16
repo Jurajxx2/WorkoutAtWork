@@ -23,16 +23,20 @@ class Exercise {
     var duration: Int = 0
     @ColumnInfo(name = "img")
     var img: String? = null
+    @ColumnInfo(name = "enabled")
+    var isEnabled: Boolean = false
 
-    constructor() {}
+
+    constructor()
 
     @Ignore
-    constructor(name: String, heading: String, description: String, repetitions: Int, duration: Int, img: String) {
+    constructor(name: String, heading: String, description: String, repetitions: Int, duration: Int, img: String, isEnabled: Boolean) {
         this.name = name
         this.heading = heading
         this.description = description
         this.repetitions = repetitions
         this.duration = duration
         this.img = img
+        this.isEnabled = isEnabled
     }
 }

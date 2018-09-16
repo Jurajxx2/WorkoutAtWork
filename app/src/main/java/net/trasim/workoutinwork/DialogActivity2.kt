@@ -15,20 +15,9 @@ class DialogActivity2 : AppCompatActivity() {
     private var finish: Button? = null
     private var settings: Button? = null
 
-    private var user: User? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dialog2)
-
-        doAsync {
-            user = AppDatabase.getInstance(this@DialogActivity2).userModel().getUserByID(1)
-
-            uiThread {
-                //toast(user!!.height.toString() + " test")
-            }
-        }
-
 
         finish = findViewById(R.id.finishBtn)
         settings = findViewById(R.id.settingsBtn)

@@ -1,50 +1,123 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="example_switch"
-        android:summary="@string/pref_description_social_recommendations"
-        android:title="@string/pref_title_social_recommendations" />
+    <PreferenceCategory
+        android:title="User settings"
+        >
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
-        android:inputType="textCapWords"
-        android:key="example_text"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title_display_name" />
+        <ListPreference
+            android:title="Gender"
+            android:entries="@array/gender"
+            android:entryValues="@array/gender"
+            android:key="gender"
+            />
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
+        <EditTextPreference
+            android:inputType="numberDecimal"
+            android:key="age"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Age"
+            />
+
+        <EditTextPreference
+            android:inputType="number"
+            android:key="weight"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Weight" />
+
+        <EditTextPreference
+            android:inputType="number"
+            android:key="height"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Height" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Reminders"
         >
-        <MultiSelectListPreference
-            android:title="Workday reminder"
-            android:entries="@array/pref_example_list_titles"
-            android:entryValues="@array/pref_example_list_values"
-            />
 
-        <MultiSelectListPreference
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="workout_reminder"
             android:title="Workout reminder"
-            android:entries="@array/pref_example_list_titles"
-            android:entryValues="@array/pref_example_list_values"
+            android:summary="Select interval between workouts"/>
+
+        <ListPreference
+            android:dependency="workout_reminder"
+            android:title="Select workout reminder interval"
+            android:entries="@array/workout_reminder"
+            android:entryValues="@array/workout_reminder_value"
+            android:defaultValue="7200000"
+            android:key="reminder_interval"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="day_reminder"
+            android:title="Daily reminder"
+            android:summary="Select on which days you want to be reminded to start workout"
             />
 
+        <MultiSelectListPreference
+            android:dependency="day_reminder"
+            android:title="Select days"
+            android:entries="@array/days"
+            android:entryValues="@array/days_values"
+            android:key="select_days"
+            />
+        <net.trasim.workoutinwork.TimePreference
+            android:dependency="day_reminder"
+            android:title="Daily reminder time"
+            android:key="select_days_time"
+            android:defaultValue="08:00"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="lunch_break"
+            android:title="Lunch break"
+            android:summary="If some workout should appear during selected period, it will be skipped automatically"/>
+        <net.trasim.workoutinwork.TimePreference
+            android:dependency="lunch_break"
+            android:title="Lunch break start"
+            android:key="lunch_start"
+            android:defaultValue="12:00"/>
+        <net.trasim.workoutinwork.TimePreference
+            android:dependency="lunch_break"
+            android:title="Lunch break end"
+            android:key="lunch_end"
+            android:defaultValue="13:00"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Notification settings">
+    <CheckBoxPreference
+        android:title="Enable vibrations"
+        android:summary="Your phone will vibrate until you check the notification"
+        android:key="vibrations"
+        android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:title="Enable sound"
+        android:summary="Your phone will play notification sound until you check the notification"
+        android:key="sounds"
+        android:defaultValue="true"
+        />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Workout settings">
+        <ListPreference
+            android:title="Number of exercises"
+            android:summary="Select number of exercises in one workout"
+            android:entries="@array/no_of_exercies"
+            android:entryValues="@array/no_of_exercies"
+            android:key="noOfExercises"
+            android:defaultValue="4"
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>
