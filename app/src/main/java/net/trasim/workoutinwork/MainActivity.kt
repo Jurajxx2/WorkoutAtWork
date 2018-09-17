@@ -21,8 +21,10 @@ import net.trasim.workoutinwork.objects.Workday
 import org.jetbrains.anko.*
 import java.util.*
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import android.os.Handler
+import android.support.v7.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import net.trasim.workoutinwork.objects.Tip
 
@@ -52,6 +54,9 @@ class MainActivity : AppCompatActivity() {
     private var workoutReminderInterval: Long = 0
     private var workoutNextReminder: Long = 0
     private var reminder: Boolean = false
+    private var databaseInit: Boolean = false
+
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         workoutReminderInterval = sharedPref.getString("reminder_interval", "7200000").toLong()
         workoutNextReminder = sharedPref.getLong("next_interval", 0)
         reminder = sharedPref.getBoolean("workout_reminder", false)
+        databaseInit = sharedPref.getBoolean("database", false)
 
         val day = sharedPref.getString("select_days_time", "0")
         val lunchStart = sharedPref.getString("lunch_start", "0")
@@ -147,7 +153,11 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             PreferenceManager.setDefaultValues(this, R.xml.pref_general, false)
-            doAsync { DatabaseInit(this@MainActivity) }
+            if (!databaseInit) {
+                doAsync { DatabaseInit(this@MainActivity) }
+                databaseInit = true
+                saveSharedPref()
+            }
             val intent2 = Intent(this@MainActivity, DialogActivity::class.java)
             startActivity(intent2)
             finish()
@@ -174,7 +184,9 @@ class MainActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId) {
                 R.id.home_btn -> {
-                    //Going to same screen
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                 R.id.workouts_history_btn -> {
                     val intent = Intent(this, WorkoutHistoryActivity::class.java)
@@ -344,6 +356,24 @@ class MainActivity : AppCompatActivity() {
                         alarmIntent
                 )
                 workoutNextReminder += workoutReminderInterval
+
+                val calendar = Calendar.getInstance().apply {
+                    timeInMillis = workoutNextReminder + workoutReminderInterval
+                }
+
+                var nextAlarmTime = if (calendar.get(Calendar.HOUR_OF_DAY)<10){
+                    "0" + calendar.get(Calendar.HOUR_OF_DAY).toString() + " : "
+                } else {
+                    calendar.get(Calendar.HOUR_OF_DAY).toString() + " : "
+                }
+
+                nextAlarmTime += if (calendar.get(Calendar.MINUTE)<10){
+                    "0" + calendar.get(Calendar.MINUTE).toString()
+                } else {
+                    calendar.get(Calendar.MINUTE).toString()
+                }
+
+                nextAlarm.text = nextAlarmTime
                 saveSharedPref()
             }
         }
@@ -352,6 +382,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveSharedPref(){
         with(sharedPref.edit()){
             putBoolean("workout_reminder", reminder)
+            putBoolean("database", databaseInit)
             putString("reminder_interval", workoutReminderInterval.toString())
             putLong("next_interval", workoutNextReminder)
             apply()
@@ -369,8 +400,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startWorkout() {
+        lastWorkday.end = System.currentTimeMillis()
+        doAsync {
+            AppDatabase.getInstance(this@MainActivity).workdayModel().updateWorkday(lastWorkday)
+        }
         val intent = Intent(this, WorkoutActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -379,11 +415,19 @@ class MainActivity : AppCompatActivity() {
                 mDrawerLayout.openDrawer(GravityCompat.START)
                 true
             }
-            R.id.settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

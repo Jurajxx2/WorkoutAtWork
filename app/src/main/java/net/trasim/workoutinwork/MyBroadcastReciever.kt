@@ -21,9 +21,6 @@ import android.preference.PreferenceManager
 import java.util.*
 import android.media.AudioAttributes
 
-
-
-
 class MyBroadcastReceiver : BroadcastReceiver() {
 
     private var notificationManager: NotificationManager? = null
@@ -37,7 +34,12 @@ class MyBroadcastReceiver : BroadcastReceiver() {
     private var reminder: Boolean = false
     private var workoutReminderInterval: Long = 0
 
+    //private var vibrations: Boolean = false
+    //private var sounds: Boolean = false
+
     override fun onReceive(context: Context, intent: Intent) {
+
+        //Toast.makeText(context, intent.extras.toString(), Toast.LENGTH_LONG).show()
 
         val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -46,6 +48,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         reminder = sharedPref.getBoolean("workout_reminder", false)
+        //vibrations = sharedPref.getBoolean("vibrations", false)
+        //sounds = sharedPref.getBoolean("sounds", false)
         workoutNextReminder = sharedPref.getLong("next_interval", 0)
         workoutReminderInterval = sharedPref.getString("reminder_interval", "7200000").toLong()
 
@@ -63,19 +67,6 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
             reminder = true
             saveSharedPref()
-        }
-
-        if (intent.getBooleanExtra("skip", false)){
-            return
-        }
-
-        if (intent.getBooleanExtra("end", false)){
-
-            alarmMgr.cancel(alarmIntent)
-            reminder = false
-            saveSharedPref()
-
-            return
         }
 
         if (sharedPref.getBoolean("lunch_break", false)){
@@ -126,7 +117,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             val channel = NotificationChannel("my_channel_id", name, importance)
             channel.description = description
 
-            channel.setSound(Uri.parse("android.resource://"+ MyBroadcastReceiver::class.java.`package`.name + "/" + R.raw.siren), audioAttributes)
+            channel.setSound(Uri.parse("android.resource://" + MyBroadcastReceiver::class.java.`package`.name + "/" + R.raw.siren), audioAttributes)
+
             // Register the channel with the system
             notificationManager = context.getSystemService(
                     Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -144,17 +136,6 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         //intent.putExtra("X", "X")
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val startIntent = Intent(context, WorkoutActivity::class.java)
-        val pendingStartIntent = PendingIntent.getActivity(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val skipIntent = Intent(context, MyBroadcastReceiver::class.java)
-        skipIntent.putExtra("skip", true)
-        val pendingSkipIntent = PendingIntent.getActivity(context, 0, skipIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val endIntent = Intent(context, MyBroadcastReceiver::class.java)
-        endIntent.putExtra("end", true)
-        val pendingEndIntent = PendingIntent.getActivity(context, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
         val notification = NotificationCompat.Builder(context, channelID)
                 //.setDefaults(Notification.DEFAULT_SOUND.inv())
                 .setSmallIcon(R.mipmap.ic_launcher_round)
@@ -163,14 +144,11 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                 .setContentText("Time for your next workout, click to start")  // the contents of the entry
                 .setContentIntent(pendingIntent)  // The intent to send when the entry is clicked
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(R.drawable.ic_info_black_24dp, "Start", pendingStartIntent)
-                .addAction(R.drawable.ic_info_black_24dp, "Skip", pendingSkipIntent)
-                .addAction(R.drawable.ic_info_black_24dp, "End for Today", pendingEndIntent)
                 .setSound(Uri.parse("android.resource://"+ MyBroadcastReceiver::class.java.`package`.name + "/" + R.raw.siren))
-                //.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
 
         val notificationManagerC = NotificationManagerCompat.from(context)
         val finalNotification = notification.build()
+
         finalNotification.flags = Notification.FLAG_INSISTENT or Notification.FLAG_AUTO_CANCEL
 
         notificationManagerC.notify(notificationID, finalNotification)

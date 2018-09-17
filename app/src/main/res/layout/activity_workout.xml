@@ -123,7 +123,8 @@
                 android:textSize="36sp"
                 app:layout_constraintEnd_toStartOf="@+id/countdownButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exerciseDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/exerciseDescription"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/countdownButton"
@@ -135,7 +136,8 @@
                 android:textColor="@android:color/background_light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/countdownTimer"
-                app:layout_constraintTop_toBottomOf="@+id/exerciseDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/exerciseDescription"
+                android:visibility="invisible"/>
 
         </android.support.constraint.ConstraintLayout>
 

@@ -50,8 +50,8 @@ class WorkdayReportActivity : AppCompatActivity() {
                     timeInMillis = workday.end
                 }
 
-                start.text = myCalender2.get(Calendar.HOUR).toString() + ":" + myCalender2.get(Calendar.MINUTE).toString()
-                end.text = myCalender3.get(Calendar.HOUR).toString() + ":" + myCalender2.get(Calendar.MINUTE).toString()
+                start.text = myCalender2.get(Calendar.HOUR_OF_DAY).toString() + ":" + myCalender2.get(Calendar.MINUTE).toString()
+                end.text = myCalender3.get(Calendar.HOUR_OF_DAY).toString() + ":" + myCalender3.get(Calendar.MINUTE).toString()
                 workoutsNo.text = workouts.size.toString()
 
                 var recyclerView = findViewById<RecyclerView>(R.id.workoutsList)

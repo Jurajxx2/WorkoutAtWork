@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -17,14 +18,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.objects.User
 import net.trasim.workoutinwork.objects.Workday
 import net.trasim.workoutinwork.objects.Workout
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.Appcompat
 import java.util.*
 
 
@@ -58,6 +59,8 @@ class WorkoutActivity : AppCompatActivity() {
     private var reminder: Boolean = false
     private var countdown: Long = 0
 
+    private var doubleBackToExitPressedOnce = false
+
     private lateinit var timer: CountDownTimer2
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +90,10 @@ class WorkoutActivity : AppCompatActivity() {
         if (reminder){
             workoutNextReminder = System.currentTimeMillis()
             saveSharedPref()
+        } else {
+            buttonFinish.visibility = View.GONE
         }
+
 
         doAsync {
             exercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().allExercises
@@ -116,24 +122,54 @@ class WorkoutActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
-                    var intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    alert("End workout", "Are you sure you want to end this workout<?") {
+                        yesButton {
+                            val intent = Intent(this@WorkoutActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        noButton {}
+                    }.show()
                 }
                 R.id.workouts_history_btn -> {
-                    var intent = Intent(this, WorkoutHistoryActivity::class.java)
-                    startActivity(intent)
+                    alert("End workout", "Are you sure you want to end this workout<?") {
+                        yesButton {
+                            val intent = Intent(this@WorkoutActivity, WorkoutHistoryActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        noButton {}
+                    }.show()
                 }
                 R.id.settings_btn -> {
-                    var intent = Intent(this, SettingsActivity::class.java)
-                    startActivity(intent)
+                    alert("End workout", "Are you sure you want to end this workout<?") {
+                        yesButton {
+                            val intent = Intent(this@WorkoutActivity, SettingsActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        noButton {}
+                    }.show()
                 }
                 R.id.workout_list_btn -> {
-                    var intent = Intent(this, WorkoutListActivity::class.java)
-                    startActivity(intent)
+                    alert("End workout", "Are you sure you want to end this workout<?") {
+                        yesButton {
+                            val intent = Intent(this@WorkoutActivity, WorkoutListActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        noButton {}
+                    }.show()
                 }
                 R.id.info -> {
-                    var intent = Intent(this, InfoActivity::class.java)
-                    startActivity(intent)
+                    alert("Are you sure you want to end this workout?", "End workout") {
+                        yesButton {
+                            val intent = Intent(this@WorkoutActivity, InfoActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        noButton {}
+                    }.show()
                 }
             }
             true
@@ -145,8 +181,13 @@ class WorkoutActivity : AppCompatActivity() {
 
             } else {
                 if (countdownButton.visibility == View.VISIBLE || countdownTimer.visibility == View.VISIBLE){
+                    if (timer.timeLeft()>0){
+                        toast("Please, finish the exercise to proceed")
+                        return@setOnClickListener
+                    }
                     countdownButton.visibility = View.GONE
                     countdownTimer.visibility = View.GONE
+                    timer.cancel()
                 }
                 nextExercise()
             }
@@ -159,20 +200,34 @@ class WorkoutActivity : AppCompatActivity() {
                 val alarmIntent = PendingIntent.getBroadcast(this.applicationContext, 0, intent, 0)
 
                 alarmMgr.cancel(alarmIntent)
+                reminder = false
                 saveSharedPref()
             }
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
         buttonEnd.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
         countdownButton.setOnClickListener {
             when {
-                timer.timeLeft()>0 -> timer.pause()
-                timer.isPaused -> timer.resume()
-                else -> timer.create()
+                timer.timeLeft()>0 && !timer.isPaused -> {
+                    timer.pause()
+                    countdownButton.text = "Start"
+                }
+                timer.isPaused -> {
+                    timer.resume()
+                    countdownButton.text = "Pause"
+                }
+                else -> {
+                    timer.create()
+                    countdownButton.text = "Pause"
+                }
             }
         }
     }
@@ -186,13 +241,14 @@ class WorkoutActivity : AppCompatActivity() {
                 toast("Please, enable at least one exercise in order to start workout")
                 finish()
             }
-            val randomNr = (0 until enabledExercises.size).random()
+            val randomNr = (0 until enabledExercises.size-1).random()
 
-            lastWorkday.workouts ++
+
+
+            lastWorkday.workouts++
             AppDatabase.getInstance(this@WorkoutActivity).workdayModel().updateWorkday(lastWorkday)
             mWorkout = Workout(lastWorkday.id)
             mWorkout.exerciseID = enabledExercises[randomNr].id
-            AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
             uiThread {
                 updateUI(enabledExercises[randomNr])
             }
@@ -224,9 +280,11 @@ class WorkoutActivity : AppCompatActivity() {
 
         var popis = ""
         if (exercise.duration>0){
+            mWorkout.duration = exercise.duration
             popis = "\nDo it for " + exercise.duration.toString() + " seconds"
             countdownButton.visibility = View.VISIBLE
             countdownTimer.visibility = View.VISIBLE
+            countdownTimer.text = exercise.duration.toString()
 
             countdown = (exercise.duration * 1000).toLong()
 
@@ -242,8 +300,14 @@ class WorkoutActivity : AppCompatActivity() {
             }
 
         } else if (exercise.repetitions>0){
+            mWorkout.repetitions = exercise.repetitions
             popis = "\nDo it " + exercise.repetitions.toString() + " times"
         }
+
+        doAsync {
+            AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
+        }
+
         description.text = exercise.heading + popis
     }
 
@@ -265,6 +329,19 @@ class WorkoutActivity : AppCompatActivity() {
             putLong("next_interval", workoutNextReminder)
             apply()
         }
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to finish workout", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }
 

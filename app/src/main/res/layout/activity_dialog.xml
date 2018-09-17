@@ -82,7 +82,7 @@
         android:background="@color/colorPrimaryDark"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="Later"
+        android:text="Finish"
         android:textColor="@color/colorBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

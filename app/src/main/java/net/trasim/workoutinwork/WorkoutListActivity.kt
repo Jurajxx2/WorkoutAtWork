@@ -45,24 +45,29 @@ class WorkoutListActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
-                    var intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.workouts_history_btn -> {
-                    var intent = Intent(this, WorkoutHistoryActivity::class.java)
+                    val intent = Intent(this, WorkoutHistoryActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.settings_btn -> {
-                    var intent = Intent(this, SettingsActivity::class.java)
+                    val intent = Intent(this, SettingsActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.workout_list_btn -> {
-                    var intent = Intent(this, WorkoutListActivity::class.java)
+                    val intent = Intent(this, WorkoutListActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
                 R.id.info -> {
-                    var intent = Intent(this, InfoActivity::class.java)
+                    val intent = Intent(this, InfoActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
 
@@ -82,6 +87,12 @@ class WorkoutListActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

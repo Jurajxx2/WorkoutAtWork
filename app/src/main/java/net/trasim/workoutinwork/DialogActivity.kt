@@ -74,8 +74,6 @@ class DialogActivity : Activity() {
         }
 
         later!!.setOnClickListener {
-            val intent = Intent(this@DialogActivity, MainActivity::class.java)
-            startActivity(intent)
             finish()
         }
     }

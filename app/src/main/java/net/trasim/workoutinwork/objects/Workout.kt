@@ -16,12 +16,10 @@ class Workout {
     var exerciseID: Int = 0
     @ColumnInfo(name = "workdayID")
     var workdayID: Int = 0
-    @ColumnInfo(name = "minutes")
-    var minutes: Int = 0
-    @ColumnInfo(name = "calories")
-    var calories: Int = 0
-    @ColumnInfo(name = "done")
-    var done: Long = 0
+    @ColumnInfo(name = "duration")
+    var duration: Int = 0
+    @ColumnInfo(name = "repetitions")
+    var repetitions: Int = 0
 
     constructor()
 

@@ -13,19 +13,11 @@ import android.widget.Button
 
 class InfoActivity : AppCompatActivity() {
 
-    private lateinit var finish: Button
-    private lateinit var settings: Button
     private lateinit var mDrawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dialog2)
-
-        finish = findViewById(R.id.finishBtn)
-        settings = findViewById(R.id.settingsBtn)
-
-        finish.visibility = View.INVISIBLE
-        settings.visibility = View.INVISIBLE
+        setContentView(R.layout.activity_info)
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -48,27 +40,27 @@ class InfoActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
-                    var intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 R.id.workouts_history_btn -> {
-                    var intent = Intent(this, WorkoutHistoryActivity::class.java)
+                    val intent = Intent(this, WorkoutHistoryActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 R.id.settings_btn -> {
-                    var intent = Intent(this, SettingsActivity::class.java)
+                    val intent = Intent(this, SettingsActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 R.id.workout_list_btn -> {
-                    var intent = Intent(this, WorkoutListActivity::class.java)
+                    val intent = Intent(this, WorkoutListActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 R.id.info -> {
-                    var intent = Intent(this, InfoActivity::class.java)
+                    val intent = Intent(this, InfoActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -78,6 +70,12 @@ class InfoActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

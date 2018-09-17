@@ -31,11 +31,12 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
         val exercise = exercises[workout.exerciseID]
 
         holder.title.text = exercise.name
-        holder.repetitions.text = workout.done.toString()
-        if (exercise.duration>0){
-            holder.done.text = "Duration: "
-        } else if (exercise.repetitions>0){
+        if (workout.repetitions>0){
             holder.done.text = "Repetitions: "
+            holder.repetitions.text = workout.repetitions.toString() + "x"
+        } else if (workout.duration>0){
+            holder.done.text = "Duration: "
+            holder.repetitions.text = workout.duration.toString() + "s"
         }
     }
 

@@ -60,21 +60,23 @@
             android:defaultValue="false"
             android:key="day_reminder"
             android:title="Daily reminder"
-            android:summary="Select on which days you want to be reminded to start workout"
+            android:summary="If daily reminder is enabled, workout notification will start on selected days"
             />
-
         <MultiSelectListPreference
             android:dependency="day_reminder"
             android:title="Select days"
             android:entries="@array/days"
             android:entryValues="@array/days_values"
             android:key="select_days"
+            android:summary="Select on which days you want to be reminded to start workout"
             />
         <net.trasim.workoutinwork.TimePreference
             android:dependency="day_reminder"
             android:title="Daily reminder time"
             android:key="select_days_time"
-            android:defaultValue="08:00"/>
+            android:defaultValue="08:00"
+            android:summary="Select time on which you want to start for selected days"
+            />
         <SwitchPreference
             android:defaultValue="false"
             android:key="lunch_break"
@@ -90,22 +92,6 @@
             android:title="Lunch break end"
             android:key="lunch_end"
             android:defaultValue="13:00"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="Notification settings">
-    <CheckBoxPreference
-        android:title="Enable vibrations"
-        android:summary="Your phone will vibrate until you check the notification"
-        android:key="vibrations"
-        android:defaultValue="true"
-        />
-    <CheckBoxPreference
-        android:title="Enable sound"
-        android:summary="Your phone will play notification sound until you check the notification"
-        android:key="sounds"
-        android:defaultValue="true"
-        />
     </PreferenceCategory>
 
     <PreferenceCategory
