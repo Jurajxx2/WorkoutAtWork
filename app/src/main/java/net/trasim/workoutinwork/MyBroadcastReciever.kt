@@ -94,6 +94,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
+        //TODO test sound
         try {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val r = RingtoneManager.getRingtone(context, notification)
