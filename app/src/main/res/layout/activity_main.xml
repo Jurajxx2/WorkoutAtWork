@@ -111,16 +111,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorPrimaryDark"
-                android:text="Enable Reminder"
+                android:text="enable workout reminder"
                 android:textAlignment="center"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/finishToday"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/startWorkout" />
 
             <Button
@@ -139,23 +139,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/finishToday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/colorPrimaryDark"
-                android:text="FINISH FOR TODAY"
-                android:textAlignment="center"
-                android:textColor="@color/colorBackground"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/enableReminder"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startWorkout" />
 
             <View
                 android:id="@+id/view2"
@@ -188,6 +171,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
+                android:contentDescription="info_label"
                 app:layout_constraintBottom_toBottomOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="@+id/view2"
                 app:layout_constraintTop_toTopOf="@+id/view2"

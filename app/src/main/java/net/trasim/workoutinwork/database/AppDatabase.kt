@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import net.trasim.workoutinwork.objects.*
 
-@Database(entities = [(Workday::class), (Workout::class), (Exercise::class), (Tip::class)], version = 2)
+@Database(entities = [(Workday::class), (Workout::class), (Exercise::class), (Tip::class)], version = 4)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun workdayModel(): WorkdayDao

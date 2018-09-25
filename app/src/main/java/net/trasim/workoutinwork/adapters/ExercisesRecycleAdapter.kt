@@ -1,6 +1,7 @@
 package net.trasim.workoutinwork.adapters
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.Toast
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.database.AppDatabase
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -24,6 +26,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         var enableExercise: Switch = view.findViewById(R.id.switch1)
         var plus: Button = view.findViewById(R.id.plus)
         var minus: Button = view.findViewById(R.id.minus)
+        var background: ConstraintLayout = view.findViewById(R.id.background)
 
     }
 
@@ -36,7 +39,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val exercises = exercisesList[position]
-        holder.title.text = exercises.name
+        holder.title.text = exercises.name + position.rem(2).toString()
 
         when(exercises.img){
             "pushup" -> holder.img.setImageResource(R.drawable.pushup)
@@ -85,7 +88,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
-            holder.description.text = exercises.heading + description
+            holder.description.text = exercises.description + description
         }
 
         holder.minus.setOnClickListener {
@@ -100,7 +103,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
-            holder.description.text = exercises.heading + description
+            holder.description.text = exercises.description + description
         }
 
         if (exercises.duration>0){
@@ -108,7 +111,13 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         } else if (exercises.repetitions>0){
             description = "\nDo it " + exercises.repetitions.toString() + " times"
         }
-        holder.description.text = exercises.heading + description
+        holder.description.text = exercises.description + description
+
+        if (position.rem(2) == 0){
+            holder.background.backgroundColor = R.color.design_fab_shadow_mid_color
+        } else {
+            holder.background.backgroundColor = R.color.colorBackground
+        }
     }
 
     override fun getItemCount(): Int {

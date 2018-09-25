@@ -122,7 +122,7 @@ class WorkoutActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
-                    alert("End workout", "Are you sure you want to end this workout<?") {
+                    alert("Are you sure you want to end this workout?", "End workout") {
                         yesButton {
                             val intent = Intent(this@WorkoutActivity, MainActivity::class.java)
                             startActivity(intent)
@@ -132,7 +132,7 @@ class WorkoutActivity : AppCompatActivity() {
                     }.show()
                 }
                 R.id.workouts_history_btn -> {
-                    alert("End workout", "Are you sure you want to end this workout<?") {
+                    alert("Are you sure you want to end this workout?", "End workout") {
                         yesButton {
                             val intent = Intent(this@WorkoutActivity, WorkoutHistoryActivity::class.java)
                             startActivity(intent)
@@ -142,7 +142,7 @@ class WorkoutActivity : AppCompatActivity() {
                     }.show()
                 }
                 R.id.settings_btn -> {
-                    alert("End workout", "Are you sure you want to end this workout<?") {
+                    alert("Are you sure you want to end this workout?", "End workout") {
                         yesButton {
                             val intent = Intent(this@WorkoutActivity, SettingsActivity::class.java)
                             startActivity(intent)
@@ -152,7 +152,7 @@ class WorkoutActivity : AppCompatActivity() {
                     }.show()
                 }
                 R.id.workout_list_btn -> {
-                    alert("End workout", "Are you sure you want to end this workout<?") {
+                    alert("Are you sure you want to end this workout?", "End workout") {
                         yesButton {
                             val intent = Intent(this@WorkoutActivity, WorkoutListActivity::class.java)
                             startActivity(intent)
@@ -216,6 +216,9 @@ class WorkoutActivity : AppCompatActivity() {
 
         countdownButton.setOnClickListener {
             when {
+                timer.timeLeft()<=0 -> {
+                    toast("Proceed to next workout")
+                }
                 timer.timeLeft()>0 && !timer.isPaused -> {
                     timer.pause()
                     countdownButton.text = "Start"
@@ -280,8 +283,9 @@ class WorkoutActivity : AppCompatActivity() {
             mWorkout.duration = exercise.duration
             popis = "\nDo it for " + exercise.duration.toString() + " seconds"
             countdownButton.visibility = View.VISIBLE
+            countdownButton.text = "Start"
             countdownTimer.visibility = View.VISIBLE
-            countdownTimer.text = exercise.duration.toString()
+            countdownTimer.text = exercise.duration.toString() + "s"
 
             countdown = (exercise.duration * 1000).toLong()
 
@@ -292,7 +296,7 @@ class WorkoutActivity : AppCompatActivity() {
                 }
 
                 override fun onFinish() {
-                    countdownTimer.text = "0s"
+                    countdownTimer.text = "Finished"
                 }
             }
 
@@ -305,7 +309,7 @@ class WorkoutActivity : AppCompatActivity() {
             AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
         }
 
-        description.text = exercise.heading + popis
+        description.text = exercise.description + popis
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

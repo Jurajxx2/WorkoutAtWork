@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var enableReminder: Button
     private lateinit var startWorkout: Button
-    private lateinit var endToday: Button
     private lateinit var setInterval: Button
     private lateinit var reminderInterval: TextView
     private lateinit var nextAlarm: TextView
@@ -84,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         setInterval = findViewById(R.id.setInterval)
         reminderInterval = findViewById(R.id.reminderInterval)
         nextAlarm = findViewById(R.id.nextAlarm)
-        endToday = findViewById(R.id.finishToday)
         hintHeading = findViewById(R.id.hintHeading)
         hintText = findViewById(R.id.hintText)
 
@@ -120,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     saveSharedPref()
                 } else {
 
-                    enableReminder.text = "Disable reminder"
+                    enableReminder.text = "Disable workout reminder"
 
                     myCalender.set(Calendar.HOUR_OF_DAY, hour)
                     myCalender.set(Calendar.MINUTE, minute)
@@ -215,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
         enableReminder.setOnClickListener {
             if (reminder) {
-                enableReminder.text = "Enable reminder"
+                enableReminder.text = "Enable workout reminder"
                 reminder = false
                 alarmMgr?.cancel(alarmIntent)
                 reminderInterval.text = "_ _ : _ _"
@@ -225,7 +223,7 @@ class MainActivity : AppCompatActivity() {
                 val myCalender = Calendar.getInstance()
                 val hour = myCalender.get(Calendar.HOUR_OF_DAY)
                 val minute = myCalender.get(Calendar.MINUTE)
-                enableReminder.text = "Disable reminder"
+                enableReminder.text = "Disable workout reminder"
                 reminder = true
                 workoutNextReminder = System.currentTimeMillis()
 
@@ -334,17 +332,6 @@ class MainActivity : AppCompatActivity() {
             timePickerDialog.setTitle("Choose interval:")
             timePickerDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             timePickerDialog.show()
-        }
-
-        endToday.setOnClickListener {
-            if (reminder) {
-                enableReminder.text = "Enable reminder"
-                reminder = false
-                alarmMgr?.cancel(alarmIntent)
-                reminderInterval.text = "_ _ : _ _"
-                nextAlarm.text = "_ _ : _ _"
-                saveSharedPref()
-            }
         }
 
         skipWorkout.setOnClickListener {
