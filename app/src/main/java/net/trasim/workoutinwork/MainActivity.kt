@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 myCalender.set(Calendar.HOUR_OF_DAY, hour + time/60)
                 myCalender.set(Calendar.MINUTE, minute + time%60)
 
-                if (time % 60 > 10) {
+                if (time % 60 > 9) {
                     val intervalText = "0" + (time / 60).toString() + " : " + (time % 60).toString()
                     reminderInterval.text = intervalText
                 } else {
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity() {
                         //Update settings here
                         saveSharedPref()
 
-                        if (time % 60 > 10) {
+                        if (time % 60 > 9) {
                             val intervalText = "0" + (time / 60).toString() + " : " + (time % 60).toString()
                             reminderInterval.text = intervalText
                         } else {

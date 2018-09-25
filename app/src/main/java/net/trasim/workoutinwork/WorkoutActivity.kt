@@ -241,9 +241,7 @@ class WorkoutActivity : AppCompatActivity() {
                 toast("Please, enable at least one exercise in order to start workout")
                 finish()
             }
-            val randomNr = (0 until enabledExercises.size-1).random()
-
-
+            val randomNr = (0 until enabledExercises.size).random()
 
             lastWorkday.workouts++
             AppDatabase.getInstance(this@WorkoutActivity).workdayModel().updateWorkday(lastWorkday)
@@ -268,8 +266,7 @@ class WorkoutActivity : AppCompatActivity() {
             "lunge" -> img.setImageResource(R.drawable.lunge)
             "plank" -> img.setImageResource(R.drawable.plank)
             "rightplank" -> img.setImageResource(R.drawable.rightplank)
-            "rotation" -> img.setImageResource(R.drawable.rotation)
-            "running" -> img.setImageResource(R.drawable.runnung)
+            "running" -> img.setImageResource(R.drawable.running)
             "squat" -> img.setImageResource(R.drawable.squat)
             "stepup" -> img.setImageResource(R.drawable.stepup)
             "triceps" -> img.setImageResource(R.drawable.triceps)
