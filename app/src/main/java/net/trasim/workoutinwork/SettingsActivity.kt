@@ -91,6 +91,7 @@ class SettingsActivity : AppCompatActivity() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
+        //Define listener that will listen to preferences changes
         listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
             if (key=="workout_reminder"){
                 reminder = prefs.getBoolean("workout_reminder", false)
@@ -161,17 +162,14 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        //Register previously defined listener
         prefs.registerOnSharedPreferenceChangeListener(listener)
 
+        //Define menu
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
-            //menuItem.isChecked = true
-            // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
 
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -205,15 +203,16 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
+    //Return to main activity after backpressed
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
+    //Function to set daily alarm based on list of days from settings
     private fun setDailyAlarm(){
         prefs.getStringSet("select_days", setOf()).forEach {
-            toast(it)
             when(it){
                 "1" -> {
                     val calendar: Calendar = Calendar.getInstance().apply {
@@ -333,6 +332,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    //Fuction to convert time in format HH:MM to milliseconds
     private fun conversion(time: String): Long {
         val calendar = Calendar.getInstance().apply{
             timeInMillis = System.currentTimeMillis()
@@ -342,6 +342,7 @@ class SettingsActivity : AppCompatActivity() {
         return calendar.timeInMillis
     }
 
+    //Unregister listener for changes
     override fun onStop() {
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
         super.onStop()
@@ -358,7 +359,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-
+    //Function to save shared preferences
     private fun saveSharedPref(){
         with(sharedPref.edit()){
             putBoolean("workout_reminder", reminder)

@@ -36,13 +36,8 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
             menuItem.isChecked = true
-            // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -74,10 +69,12 @@ class WorkoutListActivity : AppCompatActivity() {
             true
         }
 
+        //Get exercises from database
         doAsync {
             val database = AppDatabase.getInstance(this@WorkoutListActivity)
             val exercises = database.exerciseModel().allExercises
             uiThread {
+                //Update UI with list of exercises
                 var recyclerView = findViewById<RecyclerView>(R.id.exercisesList)
                 var mAdapter = ExercisesRecycleAdapter(exercises, this@WorkoutListActivity)
                 val mLayoutManager = LinearLayoutManager(applicationContext)

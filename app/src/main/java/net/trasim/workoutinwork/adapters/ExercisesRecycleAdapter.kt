@@ -6,10 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Switch
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import kotlinx.android.synthetic.main.exercise_list_row.view.*
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.database.AppDatabase
@@ -19,6 +17,7 @@ import org.jetbrains.anko.uiThread
 
 class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesRecycleAdapter.MyViewHolder>() {
 
+    //Viewholder with views in layout
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.exerciseName)
         var description: TextView = view.findViewById(R.id.exerciseDescription)
@@ -26,8 +25,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         var enableExercise: Switch = view.findViewById(R.id.switch1)
         var plus: Button = view.findViewById(R.id.plus)
         var minus: Button = view.findViewById(R.id.minus)
-        var background: ConstraintLayout = view.findViewById(R.id.background)
-
+        var background: ImageView = view.findViewById(R.id.background)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -38,8 +36,9 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        //Get exercise
         val exercises = exercisesList[position]
-        holder.title.text = exercises.name + position.rem(2).toString()
+        holder.title.text = exercises.name
 
         when(exercises.img){
             "pushup" -> holder.img.setImageResource(R.drawable.pushup)
@@ -112,12 +111,6 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
             description = "\nDo it " + exercises.repetitions.toString() + " times"
         }
         holder.description.text = exercises.description + description
-
-        if (position.rem(2) == 0){
-            holder.background.backgroundColor = R.color.design_fab_shadow_mid_color
-        } else {
-            holder.background.backgroundColor = R.color.colorBackground
-        }
     }
 
     override fun getItemCount(): Int {

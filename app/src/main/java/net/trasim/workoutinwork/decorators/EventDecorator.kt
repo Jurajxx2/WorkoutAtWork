@@ -9,6 +9,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 class EventDecorator(private val color: Int, dates: Collection<CalendarDay>) : DayViewDecorator {
     private val dates: HashSet<CalendarDay> = HashSet(dates)
 
+    //Decorater decorate days with events
     override fun shouldDecorate(day: CalendarDay): Boolean {
         return dates.contains(day)
     }

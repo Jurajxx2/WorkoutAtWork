@@ -55,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:hint="Enter your weight in kg"
         android:inputType="number"
-        android:hint="Enter your weight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectGender" />
@@ -67,8 +67,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:hint="Enter your height in cm"
         android:inputType="number"
-        android:hint="Enter your height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setWeight" />

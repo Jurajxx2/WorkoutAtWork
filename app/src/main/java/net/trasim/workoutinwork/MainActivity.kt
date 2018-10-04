@@ -30,6 +30,7 @@ import net.trasim.workoutinwork.objects.Tip
 
 class MainActivity : AppCompatActivity() {
 
+    //Layouts
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var enableReminder: Button
     private lateinit var startWorkout: Button
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var hintHeading: TextView
     private lateinit var hintText: TextView
 
+    //Objects
     private lateinit var workdays: List<Workday>
     private lateinit var tips: List<Tip>
     private var lastWorkday = Workday()
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPref: SharedPreferences
 
+    //Basic data
     private var weight: Float = 0.toFloat()
     private var height: Float = 0.toFloat()
     private var isOK: Boolean = false
@@ -61,6 +64,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        database = AppDatabase.getInstance(this@MainActivity)
+
+        //Preferences init
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         weight = sharedPref.getString("weight", "0").toFloat()
         height = sharedPref.getString("height", "0").toFloat()
@@ -78,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, MyBroadcastReceiver::class.java)
         val alarmIntent = PendingIntent.getBroadcast(this.applicationContext, 0, intent, 0)
 
+        //Views init
         enableReminder = findViewById(R.id.enableReminder)
         startWorkout = findViewById(R.id.startWorkout)
         setInterval = findViewById(R.id.setInterval)
@@ -86,10 +93,13 @@ class MainActivity : AppCompatActivity() {
         hintHeading = findViewById(R.id.hintHeading)
         hintText = findViewById(R.id.hintText)
 
+
+        //If initial settings were saved
         if(isOK){
 
+            //Get last workday - I need its date if it is today or not
+            //Get tips and update UI
             doAsync {
-                database = AppDatabase.getInstance(this@MainActivity)
                 workdays = database.workdayModel().allWorkdays
                 tips = database.tipModel().allTips
 
@@ -107,12 +117,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            //If reminder is true, update UI with information
             if (reminder){
+                setInterval.isEnabled = true
+                skipWorkout.isEnabled = true
+
                 val myCalender = Calendar.getInstance()
                 myCalender.timeInMillis = workoutNextReminder + workoutReminderInterval
                 val hour = myCalender.get(Calendar.HOUR_OF_DAY)
                 val minute = myCalender.get(Calendar.MINUTE)
 
+                //If last reminder was before actual time
                 if (myCalender.timeInMillis<System.currentTimeMillis()){
                     reminder = false
                     saveSharedPref()
@@ -147,15 +162,20 @@ class MainActivity : AppCompatActivity() {
 
                     nextAlarm.text = nextAlarmTime
                 }
+            } else {
+                setInterval.isEnabled = false
+                skipWorkout.isEnabled = false
             }
 
         } else {
+            //Initialise database - need data about exercises and tips
             PreferenceManager.setDefaultValues(this, R.xml.pref_general, false)
             if (!databaseInit) {
                 doAsync { DatabaseInit(this@MainActivity) }
                 databaseInit = true
                 saveSharedPref()
             }
+            //Launch Intro activity
             val intent2 = Intent(this@MainActivity, DialogActivity::class.java)
             startActivity(intent2)
             finish()
@@ -171,15 +191,10 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
+        //Menu buttons
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
-            //menuItem.isChecked = true
-            // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
             when (menuItem.itemId) {
                 R.id.home_btn -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -211,8 +226,12 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        //Enable reminder button - onclick updates times of next reminder and interval
         enableReminder.setOnClickListener {
             if (reminder) {
+                setInterval.isEnabled = false
+                skipWorkout.isEnabled = false
+
                 enableReminder.text = "Enable workout reminder"
                 reminder = false
                 alarmMgr?.cancel(alarmIntent)
@@ -220,6 +239,9 @@ class MainActivity : AppCompatActivity() {
                 nextAlarm.text = "_ _ : _ _"
 
             } else {
+                setInterval.isEnabled = true
+                skipWorkout.isEnabled = true
+
                 val myCalender = Calendar.getInstance()
                 val hour = myCalender.get(Calendar.HOUR_OF_DAY)
                 val minute = myCalender.get(Calendar.MINUTE)
@@ -265,6 +287,7 @@ class MainActivity : AppCompatActivity() {
             saveSharedPref()
         }
 
+        //Start workout button - launch workout activity, check if it should be added to last workday
         startWorkout.setOnClickListener {
             val c = Calendar.getInstance()
             c.timeInMillis = lastWorkday.date!!.toLong()
@@ -276,6 +299,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //Set interval for workout reminder
         setInterval.setOnClickListener {
             val myCalender = Calendar.getInstance()
             val hour = myCalender.get(Calendar.HOUR_OF_DAY)
@@ -334,6 +358,7 @@ class MainActivity : AppCompatActivity() {
             timePickerDialog.show()
         }
 
+        //Skip workout button - adds one reminder interval to reminder interval
         skipWorkout.setOnClickListener {
             if (reminder) {
                 alarmMgr.setRepeating(
@@ -366,6 +391,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Save shared pref
     private fun saveSharedPref(){
         with(sharedPref.edit()){
             putBoolean("workout_reminder", reminder)
@@ -376,20 +402,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //If today was not created any workday, it will create new workday
     private fun createWorkday() {
         val today = Calendar.getInstance().timeInMillis
         lastWorkday = Workday(today.toString(), System.currentTimeMillis(), System.currentTimeMillis(), 0)
 
         doAsync {
-            AppDatabase.getInstance(this@MainActivity).workdayModel().insertWorkday(lastWorkday)
+            database.workdayModel().insertWorkday(lastWorkday)
         }
         startWorkout()
     }
 
+    //Start workout function that will add actual time to workday end and update database and launch workout
     private fun startWorkout() {
         lastWorkday.end = System.currentTimeMillis()
         doAsync {
-            AppDatabase.getInstance(this@MainActivity).workdayModel().updateWorkday(lastWorkday)
+            database.workdayModel().updateWorkday(lastWorkday)
         }
         val intent = Intent(this, WorkoutActivity::class.java)
         startActivity(intent)
@@ -406,6 +434,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Double backpressed safety function - on backpressed toast will be displayed and after next backpressed will finish
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()

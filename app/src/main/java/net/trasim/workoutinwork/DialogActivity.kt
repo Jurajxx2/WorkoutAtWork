@@ -42,6 +42,7 @@ class DialogActivity : Activity() {
         weight = findViewById(R.id.setWeight)
         height = findViewById(R.id.setHeight)
 
+        //Button to next page
         next!!.setOnClickListener {
             if (weight.text.isEmpty() || height.text.isEmpty() || age.selectedItemPosition==0 || gender.selectedItemPosition==-1){
                 toast("Please, fill all fields")
@@ -57,6 +58,7 @@ class DialogActivity : Activity() {
                 return@setOnClickListener
             }
 
+            //Update shared preferences
             with(sharedPref.edit()){
                 putBoolean("isOK", true)
                 putString("gender", gender.selectedItem.toString())
@@ -68,11 +70,13 @@ class DialogActivity : Activity() {
                 apply()
             }
 
+            //Start intent
             val intent = Intent(this@DialogActivity, DialogActivity2::class.java)
             startActivity(intent)
             finish()
         }
 
+        //Finish button
         later!!.setOnClickListener {
             finish()
         }

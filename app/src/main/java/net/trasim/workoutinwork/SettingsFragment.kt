@@ -43,6 +43,7 @@ class SettingsFragment : PreferenceFragmentCompat(){
         lunchStart = findPreference("lunch_start") as TimePreference
         lunchEnd = findPreference("lunch_end") as TimePreference
 
+        //Listeners that listens to start, end lunch time should not be before start time and start should not be after end
         startListener = Preference.OnPreferenceChangeListener{ preference: Preference, any: Any ->
             val calendar1 = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
@@ -63,6 +64,7 @@ class SettingsFragment : PreferenceFragmentCompat(){
             true
         }
 
+        //Listeners that listens to end, end lunch time should not be before start time and start should not be after end
         endListener = Preference.OnPreferenceChangeListener{ preference: Preference, any: Any ->
             val calendar1 = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
@@ -94,6 +96,7 @@ class SettingsFragment : PreferenceFragmentCompat(){
         super.onStop()
     }
 
+    //Help function when displaying custom time preference dialog because of support v7
     override fun onDisplayPreferenceDialog(preference: Preference) {
         var dialogFragment: DialogFragment? = null
         if (preference is TimePreference) {

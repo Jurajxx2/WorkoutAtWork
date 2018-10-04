@@ -44,6 +44,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var countdownTimer: TextView
     private lateinit var title: TextView
     private lateinit var description: TextView
+    private lateinit var intensity: TextView
     private lateinit var img: pl.droidsonroids.gif.GifImageView
 
     private var exercisesInWorkout: Int = 0
@@ -61,17 +62,23 @@ class WorkoutActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
 
+    private lateinit var database: AppDatabase
+
     private lateinit var timer: CountDownTimer2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
 
+        //Initiate variables
+        database = AppDatabase.getInstance(this)
+
         title = findViewById(R.id.exerciseName)
         description = findViewById(R.id.exerciseDescription)
         img = findViewById(R.id.exerciseGif)
         mDrawerLayout = findViewById(R.id.drawer_layout)
         countdownTimer = findViewById(R.id.countdownTimer)
+        intensity = findViewById(R.id.intensity)
 
         buttonNext = findViewById(R.id.buttonNext)
         buttonFinish = findViewById(R.id.buttonFinish)
@@ -87,6 +94,7 @@ class WorkoutActivity : AppCompatActivity() {
         reminder = sharedPref.getBoolean("workout_reminder", false)
         exercisesInWorkout = sharedPref.getString("noOfExercises", "4").toInt()
 
+        //If reminder is on, refresh next time interval
         if (reminder){
             workoutNextReminder = System.currentTimeMillis()
             saveSharedPref()
@@ -94,10 +102,10 @@ class WorkoutActivity : AppCompatActivity() {
             buttonFinish.visibility = View.GONE
         }
 
-
+        //Load exercises and last workday, update UI with next exercise
         doAsync {
-            exercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().allExercises
-            lastWorkday = AppDatabase.getInstance(this@WorkoutActivity).workdayModel().getLastWorkday()
+            exercises = database.exerciseModel().allExercises
+            lastWorkday = database.workdayModel().getLastWorkday()
             uiThread {
                 nextExercise()
             }
@@ -111,15 +119,11 @@ class WorkoutActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
+        //Menu
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
             menuItem.isChecked = true
-            // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
                     alert("Are you sure you want to end this workout?", "End workout") {
@@ -193,6 +197,7 @@ class WorkoutActivity : AppCompatActivity() {
             }
         }
 
+        //Button to finish workout and reminder if enabled
         buttonFinish.setOnClickListener {
             if (reminder) {
                 val alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -208,17 +213,16 @@ class WorkoutActivity : AppCompatActivity() {
             finish()
         }
 
+        //Button to leave workout
         buttonEnd.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
 
+        //Working with countdown for duration exercises
         countdownButton.setOnClickListener {
             when {
-                timer.timeLeft()<=0 -> {
-                    toast("Proceed to next workout")
-                }
                 timer.timeLeft()>0 && !timer.isPaused -> {
                     timer.pause()
                     countdownButton.text = "Start"
@@ -235,19 +239,23 @@ class WorkoutActivity : AppCompatActivity() {
         }
     }
 
+    //Function to select next exercise by random number
     private fun nextExercise(){
+        //Update number of done exercises
         exercisesDone++
         doAsync{
-            val enabledExercises = AppDatabase.getInstance(this@WorkoutActivity).exerciseModel().getEnabledExercises()
+            val enabledExercises = database.exerciseModel().getEnabledExercises()
 
             if (enabledExercises.isEmpty()){
                 toast("Please, enable at least one exercise in order to start workout")
                 finish()
             }
+            //Get random nr
             val randomNr = (0 until enabledExercises.size).random()
 
+            //Update workday
             lastWorkday.workouts++
-            AppDatabase.getInstance(this@WorkoutActivity).workdayModel().updateWorkday(lastWorkday)
+            database.workdayModel().updateWorkday(lastWorkday)
             mWorkout = Workout(lastWorkday.id)
             mWorkout.exerciseID = enabledExercises[randomNr].id
             uiThread {
@@ -256,7 +264,9 @@ class WorkoutActivity : AppCompatActivity() {
         }
     }
 
+    //Function updates UI with selected exercise
     private fun updateUI(exercise: Exercise){
+        //Hide button if it is last workout
         if (exercisesDone==exercisesInWorkout){
             buttonNext.visibility = View.INVISIBLE
         }
@@ -281,9 +291,10 @@ class WorkoutActivity : AppCompatActivity() {
         var popis = ""
         if (exercise.duration>0){
             mWorkout.duration = exercise.duration
-            popis = "\nDo it for " + exercise.duration.toString() + " seconds"
+            popis = "Do it for " + exercise.duration.toString() + " seconds"
             countdownButton.visibility = View.VISIBLE
             countdownButton.text = "Start"
+            countdownButton.isEnabled = true
             countdownTimer.visibility = View.VISIBLE
             countdownTimer.text = exercise.duration.toString() + "s"
 
@@ -296,21 +307,24 @@ class WorkoutActivity : AppCompatActivity() {
                 }
 
                 override fun onFinish() {
+                    countdownButton.isEnabled = false
                     countdownTimer.text = "Finished"
                 }
             }
 
         } else if (exercise.repetitions>0){
             mWorkout.repetitions = exercise.repetitions
-            popis = "\nDo it " + exercise.repetitions.toString() + " times"
+            popis = "Do it " + exercise.repetitions.toString() + " times"
         }
 
         doAsync {
-            AppDatabase.getInstance(this@WorkoutActivity).workoutModel().insertWorkout(mWorkout)
+            database.workoutModel().insertWorkout(mWorkout)
         }
 
-        description.text = exercise.description + popis
+        description.text = exercise.description
+        intensity.text = popis
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

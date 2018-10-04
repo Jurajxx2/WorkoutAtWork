@@ -27,8 +27,9 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        //Get workouts
         val workout = workoutsList[position]
-        val exercise = exercises[workout.exerciseID]
+        val exercise = exercises[workout.exerciseID - 1]
 
         holder.title.text = exercise.name
         if (workout.repetitions>0){

@@ -1,6 +1,7 @@
 package net.trasim.workoutinwork
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,28 +9,39 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.preference.PreferenceManager
 import android.view.MenuItem
+import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import net.trasim.workoutinwork.adapters.ExercisesRecycleAdapter
-import net.trasim.workoutinwork.adapters.WorkoutsRecycleAdapter
 import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.decorators.EventDecorator
 import net.trasim.workoutinwork.decorators.OneDayDecorator
 import net.trasim.workoutinwork.objects.Workday
+import net.trasim.workoutinwork.objects.Workout
 import org.jetbrains.anko.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class WorkoutHistoryActivity : AppCompatActivity() {
+
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mCalendarView: MaterialCalendarView
     private var oneDayDecorator = OneDayDecorator()
     private lateinit var workdays: List<Workday>
+    private lateinit var workouts: List<Workout>
+    private lateinit var database: AppDatabase
+
+    private lateinit var bmi: TextView
+    private lateinit var workoutsNo: TextView
+    private lateinit var workdaysNo: TextView
+
+    private lateinit var sharedPref: SharedPreferences
+
+    private var weight: Float = 0.toFloat()
+    private var height: Float = 0.toFloat()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +49,23 @@ class WorkoutHistoryActivity : AppCompatActivity() {
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
         mCalendarView = findViewById(R.id.calendar)
+        database = AppDatabase.getInstance(this)
+
+        bmi = findViewById(R.id.bmiNo)
+        workoutsNo = findViewById(R.id.workoutsNo)
+        workdaysNo = findViewById(R.id.workDaysNo)
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+
+        weight = sharedPref.getString("weight", "0").toFloat()
+        height = sharedPref.getString("height", "0").toFloat()
 
         mCalendarView.currentDate = CalendarDay.today()
 
+        //Get workouts and workdays
         doAsync {
-            workdays = AppDatabase.getInstance(this@WorkoutHistoryActivity).workdayModel().allWorkdays
+            workdays = database.workdayModel().allWorkdays
+            workouts = database.workoutModel().allWorkouts
             val dates = ArrayList<CalendarDay>()
             for (workday in workdays){
                 val c = Calendar.getInstance()
@@ -49,17 +73,24 @@ class WorkoutHistoryActivity : AppCompatActivity() {
                 dates.add(CalendarDay.from(c))
             }
             uiThread {
-                var decorator = EventDecorator(Color.RED, dates)
+                //Update UI
+                val decorator = EventDecorator(Color.RED, dates)
                 mCalendarView.addDecorators(decorator, oneDayDecorator)
+
+                bmi.text = (weight/((height/100)*(height/100))).toString()
+                workoutsNo.text = (workouts.size - 1).toString()
+                workdaysNo.text = (workdays.size - 1).toString()
             }
         }
 
+        //On click listener to some date in calendar
         mCalendarView.setOnDateChangedListener { materialCalendarView, calendarDay, b ->
             for (workday in workdays){
                 val c = Calendar.getInstance()
                 c.timeInMillis = workday.date!!.toLong()
                 if (CalendarDay.from(c) == calendarDay){
 
+                    //Launch dialog activity with info about selected date
                     val intent = Intent(this, WorkdayReportActivity::class.java)
                     intent.putExtra("workdayID", workday.id)
                     startActivity(intent)
@@ -80,13 +111,8 @@ class WorkoutHistoryActivity : AppCompatActivity() {
 
         val navigationView: NavigationView = findViewById((R.id.nav_view))
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
             menuItem.isChecked = true
-            // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.home_btn -> {
                     val intent = Intent(this, MainActivity::class.java)

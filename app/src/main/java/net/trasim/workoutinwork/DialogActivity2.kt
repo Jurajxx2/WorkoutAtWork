@@ -22,12 +22,14 @@ class DialogActivity2 : AppCompatActivity() {
         finish = findViewById(R.id.finishBtn)
         settings = findViewById(R.id.settingsBtn)
 
+        //Exit screen to main activity
         finish!!.setOnClickListener {
             val intent = Intent(this@DialogActivity2, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
 
+        //Go to settings
         settings!!.setOnClickListener {
             val intent = Intent(this@DialogActivity2, SettingsActivity::class.java)
             startActivity(intent)
