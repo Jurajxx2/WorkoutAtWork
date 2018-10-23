@@ -7,10 +7,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
-import android.text.TextUtils.substring
-import android.widget.TimePicker
-import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 import java.util.*
 
 /**
@@ -103,12 +99,12 @@ class SettingsFragment : PreferenceFragmentCompat(){
             dialogFragment = TimePreferenceDialogFragmentCompat()
             val bundle = Bundle(1)
             bundle.putString("key", preference.getKey())
-            dialogFragment!!.setArguments(bundle)
+            dialogFragment.arguments = bundle
         }
 
         if (dialogFragment != null) {
-            dialogFragment!!.setTargetFragment(this, 0)
-            dialogFragment!!.show(this.fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
+            dialogFragment.setTargetFragment(this, 0)
+            dialogFragment.show(this.fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
         } else {
             super.onDisplayPreferenceDialog(preference)
         }

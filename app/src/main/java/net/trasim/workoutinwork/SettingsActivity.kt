@@ -104,11 +104,11 @@ class SettingsActivity : AppCompatActivity() {
                     workoutNextReminder = System.currentTimeMillis()
                     saveSharedPref()
                 } else {
-                    alarmMgr?.cancel(alarmIntent)
+                    alarmMgr.cancel(alarmIntent)
                 }
             }
             if (key=="reminder_interval"){
-                alarmMgr?.cancel(alarmIntent)
+                alarmMgr.cancel(alarmIntent)
                 workoutReminderInterval = prefs.getString("reminder_interval", "7200000").toLong()
                 alarmMgr.setRepeating(
                         AlarmManager.RTC_WAKEUP,
@@ -172,28 +172,28 @@ class SettingsActivity : AppCompatActivity() {
 
             when (menuItem.itemId){
                 R.id.home_btn -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, MainActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.workouts_history_btn -> {
-                    val intent = Intent(this, WorkoutHistoryActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, WorkoutHistoryActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.settings_btn -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, SettingsActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.workout_list_btn -> {
-                    val intent = Intent(this, WorkoutListActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, WorkoutListActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.info -> {
-                    val intent = Intent(this, InfoActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, InfoActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
             }

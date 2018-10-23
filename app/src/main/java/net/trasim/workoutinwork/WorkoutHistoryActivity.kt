@@ -18,6 +18,7 @@ import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.decorators.EventDecorator
 import net.trasim.workoutinwork.decorators.OneDayDecorator
 import net.trasim.workoutinwork.objects.Workday
+import net.trasim.workoutinwork.objects.WorkdayMin
 import net.trasim.workoutinwork.objects.Workout
 import org.jetbrains.anko.*
 import java.util.*
@@ -29,8 +30,8 @@ class WorkoutHistoryActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mCalendarView: MaterialCalendarView
     private var oneDayDecorator = OneDayDecorator()
-    private lateinit var workdays: List<Workday>
-    private lateinit var workouts: List<Workout>
+    private lateinit var workdays: List<WorkdayMin>
+    private var workouts: Int = 0
     private lateinit var database: AppDatabase
 
     private lateinit var bmi: TextView
@@ -64,12 +65,12 @@ class WorkoutHistoryActivity : AppCompatActivity() {
 
         //Get workouts and workdays
         doAsync {
-            workdays = database.workdayModel().allWorkdays
-            workouts = database.workoutModel().allWorkouts
+            workdays = database.workdayModel().getMinWorkdays
+            workouts = database.workoutModel().countWorkouts
             val dates = ArrayList<CalendarDay>()
             for (workday in workdays){
                 val c = Calendar.getInstance()
-                c.timeInMillis = workday.date!!.toLong()
+                c.timeInMillis = workday.date.toLong()
                 dates.add(CalendarDay.from(c))
             }
             uiThread {
@@ -78,16 +79,16 @@ class WorkoutHistoryActivity : AppCompatActivity() {
                 mCalendarView.addDecorators(decorator, oneDayDecorator)
 
                 bmi.text = (weight/((height/100)*(height/100))).toString()
-                workoutsNo.text = (workouts.size - 1).toString()
+                workoutsNo.text = (workouts - 1).toString()
                 workdaysNo.text = (workdays.size - 1).toString()
             }
         }
 
         //On click listener to some date in calendar
-        mCalendarView.setOnDateChangedListener { materialCalendarView, calendarDay, b ->
+        mCalendarView.setOnDateChangedListener { _ , calendarDay, b ->
             for (workday in workdays){
                 val c = Calendar.getInstance()
-                c.timeInMillis = workday.date!!.toLong()
+                c.timeInMillis = workday.date.toLong()
                 if (CalendarDay.from(c) == calendarDay){
 
                     //Launch dialog activity with info about selected date
@@ -100,7 +101,7 @@ class WorkoutHistoryActivity : AppCompatActivity() {
             }
         }
 
-
+        //Menu btn
         val toolbar: android.support.v7.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionbar: ActionBar? = supportActionBar
@@ -109,6 +110,7 @@ class WorkoutHistoryActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
+        //Menu
         val navigationView: NavigationView = findViewById((R.id.nav_view))
         navigationView.setNavigationItemSelectedListener { menuItem ->
             menuItem.isChecked = true

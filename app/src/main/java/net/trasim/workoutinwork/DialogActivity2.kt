@@ -1,14 +1,9 @@
 package net.trasim.workoutinwork
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Button
-import net.trasim.workoutinwork.database.AppDatabase
-import net.trasim.workoutinwork.objects.User
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 
 class DialogActivity2 : AppCompatActivity() {
 

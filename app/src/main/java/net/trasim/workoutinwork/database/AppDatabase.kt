@@ -19,6 +19,9 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
+        @JvmField
+        val MIGRATION_4_5 = Migration4To5()
+
         private var sInstance: AppDatabase? = null
 
         @Synchronized
@@ -26,7 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
             if (sInstance == null) {
                 sInstance = Room
                         .databaseBuilder(context.applicationContext, AppDatabase::class.java, "database")
-                        .fallbackToDestructiveMigration()
+                        .addMigrations(AppDatabase.MIGRATION_4_5)
                         .build()
             }
             return sInstance!!
@@ -35,5 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun destroyInstance() {
             sInstance = null
         }
+
+
     }
 }

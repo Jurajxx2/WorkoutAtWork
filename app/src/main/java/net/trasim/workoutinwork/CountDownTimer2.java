@@ -1,6 +1,5 @@
 package net.trasim.workoutinwork;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;

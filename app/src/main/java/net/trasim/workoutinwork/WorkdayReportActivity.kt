@@ -44,7 +44,8 @@ class WorkdayReportActivity : AppCompatActivity() {
                 }
 
                 //Date of the workday
-                date.text = myCalender.get(Calendar.DAY_OF_MONTH).toString() + "." + myCalender.get(Calendar.MONTH) + "."
+                val dateString = myCalender.get(Calendar.DAY_OF_MONTH).toString() + "." + myCalender.get(Calendar.MONTH) + "."
+                date.text = dateString
 
                 val myCalender2 = Calendar.getInstance().apply {
                     timeInMillis = workday.start
@@ -55,17 +56,43 @@ class WorkdayReportActivity : AppCompatActivity() {
                 }
 
                 //Set start and end time + number of workouts during that workday
-                start.text = myCalender2.get(Calendar.HOUR_OF_DAY).toString() + ":" + myCalender2.get(Calendar.MINUTE).toString()
-                end.text = myCalender3.get(Calendar.HOUR_OF_DAY).toString() + ":" + myCalender3.get(Calendar.MINUTE).toString()
+                var startText: String
+                startText = if(myCalender2.get(Calendar.HOUR_OF_DAY)<10){
+                    "0" + myCalender2.get(Calendar.HOUR_OF_DAY).toString()
+                } else {
+                    myCalender2.get(Calendar.HOUR_OF_DAY).toString()
+                }
+                startText += ":"
+                startText += if(myCalender2.get(Calendar.MINUTE)<10){
+                    "0" + myCalender2.get(Calendar.MINUTE).toString()
+                } else {
+                    myCalender2.get(Calendar.MINUTE).toString()
+                }
+
+                var endText: String
+                endText = if(myCalender3.get(Calendar.HOUR_OF_DAY)<10){
+                    "0" + myCalender3.get(Calendar.HOUR_OF_DAY).toString()
+                } else {
+                    myCalender3.get(Calendar.HOUR_OF_DAY).toString()
+                }
+                endText += ":"
+                endText += if(myCalender3.get(Calendar.MINUTE)<10){
+                    "0" + myCalender3.get(Calendar.MINUTE).toString()
+                } else {
+                    myCalender3.get(Calendar.MINUTE).toString()
+                }
+
+                start.text = startText
+                end.text = endText
                 workoutsNo.text = workouts.size.toString()
 
                 //Add workdays to recycler view
                 val recyclerView = findViewById<RecyclerView>(R.id.workoutsList)
-                val mAdapter = WorkoutsRecycleAdapter(workouts, exercises)
+                val mAdapter = WorkoutsRecycleAdapter(workouts, exercises, this@WorkdayReportActivity)
                 val mLayoutManager = LinearLayoutManager(applicationContext)
                 recyclerView!!.layoutManager = mLayoutManager
-                recyclerView!!.itemAnimator = DefaultItemAnimator()
-                recyclerView!!.adapter = mAdapter
+                recyclerView.itemAnimator = DefaultItemAnimator()
+                recyclerView.adapter = mAdapter
             }
         }
     }

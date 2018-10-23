@@ -173,6 +173,59 @@
     </string-array>
 
     <string name="reminder">Reminder</string>
+    <string name="next_reminder">Next reminder</string>
+    <string name="reminder_interval">Reminder interval</string>
+    <string name="default_value">_ _ : _ _</string>
+    <string name="skip_workout">SKIP workout</string>
+    <string name="set_interval">Set interval</string>
+    <string name="enable_workout_reminder">Enable workout reminder</string>
+    <string name="start_workout">Start workout</string>
+    <string name="default_hint_header">Drink enough water</string>
+    <string name="info_label">info label</string>
+    <string name="default_hint_content">Studies show that even mild dehydration (1–3% of body weight) can impair many aspects of brain function.</string>
+    <string name="welcome_heading">Welcome to Workout In Work app</string>
+    <string name="fill_data_notice">Please fill in some data about you for statistics</string>
+    <string name="enter_weight">Enter your weight in kg</string>
+    <string name="enter_height">Enter your height in cm</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
+    <string name="page">1 of 2</string>
+    <string name="basic_terms_heading">Some basic terms</string>
+    <string name="workout_reminder">Workout reminder</string>
+    <string name="workout_reminder_definition">- you can set reminder to remind you to workout during day in selected interval</string>
+    <string name="daily_reminder">Daily reminder</string>
+    <string name="daily_reminder_definition">- in settings, you can select days on which reminder will remind you to start workout</string>
+    <string name="exercise_and_workout">Exercise and workout</string>
+    <string name="exercise_and_workout_definition">- exercise is a single specific activity and a part of a workout. You can select which exercise to do and which not.</string>
+    <string name="start_app">Start app</string>
+    <string name="page2">2 of 2</string>
+    <string name="day">Day:</string>
+    <string name="first_workout">First workout:</string>
+    <string name="last_workout">Last workout:</string>
+    <string name="default_date">25.12.2020</string>
+    <string name="default_time">07:50</string>
+    <string name="default_time_end">16:30</string>
+    <string name="workouts_done">Workouts done:</string>
+    <string name="default_workdays_number">15</string>
+    <string name="loading">Loading…</string>
+    <string name="end_workout">End workout</string>
+    <string name="finish_today">Finish today</string>
+    <string name="next_exercise">Next exercise</string>
+    <string name="default_countdown">20s</string>
+    <string name="start">Start</string>
+    <string name="workouts_done_heading">Workouts done</string>
+    <string name="bmi">BMI</string>
+    <string name="workdays_done">Workdays done</string>
+    <string name="background_image">background image</string>
+    <string name="use_in_workout">Use in workout?</string>
+    <string name="edit_intensity">Edit intensity:</string>
+    <string name="plus_sign">+</string>
+    <string name="minus_sign">-</string>
+    <string name="work_workout_two_lines">Work  Workout</string>
+    <string name="repetitions">Repetitions:</string>
+    <string name="disable_workout_reminder">Disable workout reminder</string>
+    <string name="pause">Pause</string>
+    <string name="finished">Finished</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

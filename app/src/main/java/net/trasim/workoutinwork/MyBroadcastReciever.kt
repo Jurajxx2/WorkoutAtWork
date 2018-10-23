@@ -1,25 +1,19 @@
 package net.trasim.workoutinwork
 
 import android.app.*
-import android.content.Context.VIBRATOR_SERVICE
-import android.os.Vibrator
-import android.widget.Toast
-import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.os.VibrationEffect
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
-import android.provider.Settings.Global.getString
+import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import android.media.RingtoneManager
-import android.media.Ringtone
-import android.net.Uri
-import android.preference.PreferenceManager
+import android.widget.Toast
 import java.util.*
-import android.media.AudioAttributes
 
 class MyBroadcastReceiver : BroadcastReceiver() {
 
@@ -42,6 +36,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
+        Toast.makeText(context, "test", Toast.LENGTH_LONG).show()
+
         //Define alarmmanager
         val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -54,12 +50,12 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         //sounds = sharedPref.getBoolean("sounds", false)
         workoutNextReminder = sharedPref.getLong("next_interval", 0)
         workoutReminderInterval = sharedPref.getString("reminder_interval", "7200000").toLong()
-        dailyReminder = conversion(sharedPref.getString("select_days_time", "0"))
+        dailyReminder = conversion(sharedPref.getString("select_days_time", "08:00"))
         days = sharedPref.getStringSet("select_days", setOf())
 
 
         //If was launched after boot completed
-        if (intent.action == "android.intent.action.BOOT_COMPLETED"){
+        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             setDailyAlarm(context)
 
             if (reminder) {
@@ -80,20 +76,21 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         saveSharedPref()
 
         //If reminder was turned off (by restarting device maybe), then turn reminder on
-        if (!reminder){
-            alarmMgr.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + workoutReminderInterval,
-                    workoutReminderInterval,
-                    alarmIntent
-            )
-
-            reminder = true
-            saveSharedPref()
+        if (!reminder) {
+//            alarmMgr.setRepeating(
+//                    AlarmManager.RTC_WAKEUP,
+//                    System.currentTimeMillis() + workoutReminderInterval,
+//                    workoutReminderInterval,
+//                    alarmIntent
+//            )
+//
+//            reminder = true
+//            saveSharedPref()
+            return
         }
 
         //If lunch break option is true, check if this time is not during lunch break, otherwise return
-        if (sharedPref.getBoolean("lunch_break", false)){
+        if (sharedPref.getBoolean("lunch_break", false)) {
             val lunchStart = sharedPref.getString("lunch_start", "0")
             val lunchEnd = sharedPref.getString("lunch_end", "0")
 
@@ -113,7 +110,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                 timeInMillis = System.currentTimeMillis()
             }
 
-            if (now.time>start.time && now.time<end.time){
+            if (now.time > start.time && now.time < end.time) {
                 return
             }
         }
@@ -155,10 +152,10 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         }
 
         //Setting pending intent for notification
-        val intent = Intent(context, WorkoutActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val workoutIntent = Intent(context, WorkoutActivity::class.java)
+        workoutIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         //intent.putExtra("X", "X")
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(context, 0, workoutIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, channelID)
                 //.setDefaults(Notification.DEFAULT_SOUND.inv())
@@ -168,7 +165,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                 .setContentText("Time for your next workout, click to start")  // the contents of the entry
                 .setContentIntent(pendingIntent)  // The intent to send when the entry is clicked
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setSound(Uri.parse("android.resource://"+ MyBroadcastReceiver::class.java.`package`.name + "/" + R.raw.siren))
+                .setSound(Uri.parse("android.resource://" + MyBroadcastReceiver::class.java.`package`.name + "/" + R.raw.siren))
 
         val notificationManagerC = NotificationManagerCompat.from(context)
         val finalNotification = notification.build()
@@ -178,8 +175,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         notificationManagerC.notify(notificationID, finalNotification)
     }
 
-    private fun saveSharedPref(){
-        with(sharedPref.edit()){
+    private fun saveSharedPref() {
+        with(sharedPref.edit()) {
             putBoolean("workout_reminder", reminder)
             putLong("next_interval", workoutNextReminder)
             apply()
@@ -187,9 +184,9 @@ class MyBroadcastReceiver : BroadcastReceiver() {
     }
 
     //Set daily alarm function for days in list form settings
-    private fun setDailyAlarm(context: Context){
+    private fun setDailyAlarm(context: Context) {
         days.forEach {
-            when(it){
+            when (it) {
                 "1" -> {
                     val calendar: Calendar = Calendar.getInstance().apply {
                         timeInMillis = dailyReminder
@@ -207,10 +204,11 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             alarmIntent2
                     )
                 }
-                "2" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 1)
-                }
+                "2" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 1)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -221,11 +219,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
-                "3" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 2)
+                    )
                 }
+                "3" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 2)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -236,11 +236,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
-                "4" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 3)
+                    )
                 }
+                "4" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 3)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -251,11 +253,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
-                "5" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 4)
+                    )
                 }
+                "5" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 4)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -266,11 +270,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
-                "6" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 5)
+                    )
                 }
+                "6" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 5)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -281,11 +287,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
-                "7" -> { val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = dailyReminder
-                    set(Calendar.DAY_OF_WEEK, 6)
+                    )
                 }
+                "7" -> {
+                    val calendar: Calendar = Calendar.getInstance().apply {
+                        timeInMillis = dailyReminder
+                        set(Calendar.DAY_OF_WEEK, 6)
+                    }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -296,7 +304,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                             calendar.timeInMillis,
                             604800000,
                             alarmIntent2
-                    ) }
+                    )
+                }
                 else -> {
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -309,7 +318,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun conversion(time: String): Long {
-        val calendar = Calendar.getInstance().apply{
+        val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, time.substring(0, 2).toInt())
             set(Calendar.MINUTE, time.substring(3).toInt())

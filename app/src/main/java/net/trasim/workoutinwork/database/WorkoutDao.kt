@@ -13,6 +13,9 @@ interface WorkoutDao {
     @get:Query("SELECT * FROM Workouts")
     val allWorkouts: List<Workout>
 
+    @get:Query("SELECT count() FROM Workouts")
+    val countWorkouts: Int
+
     @Query("SELECT * FROM Workouts where id = :id")
     fun getWorkoutByID(id: Int): Workout
 

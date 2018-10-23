@@ -17,7 +17,7 @@ import org.jetbrains.anko.uiThread
 
 class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesRecycleAdapter.MyViewHolder>() {
 
-    //Viewholder with views in layout
+    //ViewHolder with views in layout
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.exerciseName)
         var description: TextView = view.findViewById(R.id.exerciseDescription)
@@ -92,11 +92,19 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
 
         holder.minus.setOnClickListener {
             if (exercises.duration>0){
-                exercises.duration -= 1
-                description = "\nDo it for " + exercises.duration.toString() + " seconds"
+                if(exercises.duration != 1) {
+                    exercises.duration -= 1
+                    description = "\nDo it for " + exercises.duration.toString() + " seconds"
+                } else {
+                    Toast.makeText(context, "Cannot change duration to 0s", Toast.LENGTH_SHORT).show()
+                }
             } else if (exercises.repetitions>0){
-                exercises.repetitions -= 1
-                description = "\nDo it " + exercises.repetitions.toString() + " times"
+                if(exercises.repetitions != 1) {
+                    exercises.repetitions -= 1
+                    description = "\nDo it " + exercises.repetitions.toString() + " times"
+                } else {
+                    Toast.makeText(context, "Cannot change repetitions to 0x", Toast.LENGTH_SHORT).show()
+                }
             }
             doAsync {
                 val database = AppDatabase.getInstance(context)

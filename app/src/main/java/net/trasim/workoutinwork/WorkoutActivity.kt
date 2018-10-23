@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -13,7 +12,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
-import android.transition.Visibility
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -21,11 +20,9 @@ import android.widget.TextView
 import android.widget.Toast
 import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.objects.Exercise
-import net.trasim.workoutinwork.objects.User
 import net.trasim.workoutinwork.objects.Workday
 import net.trasim.workoutinwork.objects.Workout
 import org.jetbrains.anko.*
-import org.jetbrains.anko.appcompat.v7.Appcompat
 import java.util.*
 
 
@@ -33,7 +30,6 @@ class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mWorkout: Workout
-    private lateinit var exercises: List<Exercise>
     private lateinit var lastWorkday: Workday
 
     private lateinit var buttonNext: Button
@@ -104,7 +100,6 @@ class WorkoutActivity : AppCompatActivity() {
 
         //Load exercises and last workday, update UI with next exercise
         doAsync {
-            exercises = database.exerciseModel().allExercises
             lastWorkday = database.workdayModel().getLastWorkday()
             uiThread {
                 nextExercise()
@@ -225,15 +220,15 @@ class WorkoutActivity : AppCompatActivity() {
             when {
                 timer.timeLeft()>0 && !timer.isPaused -> {
                     timer.pause()
-                    countdownButton.text = "Start"
+                    countdownButton.text = getString(R.string.start)
                 }
                 timer.isPaused -> {
                     timer.resume()
-                    countdownButton.text = "Pause"
+                    countdownButton.text = getString(R.string.pause)
                 }
                 else -> {
                     timer.create()
-                    countdownButton.text = "Pause"
+                    countdownButton.text = getString(R.string.pause)
                 }
             }
         }
@@ -293,22 +288,25 @@ class WorkoutActivity : AppCompatActivity() {
             mWorkout.duration = exercise.duration
             popis = "Do it for " + exercise.duration.toString() + " seconds"
             countdownButton.visibility = View.VISIBLE
-            countdownButton.text = "Start"
+            countdownButton.text = getString(R.string.start)
             countdownButton.isEnabled = true
             countdownTimer.visibility = View.VISIBLE
-            countdownTimer.text = exercise.duration.toString() + "s"
+
+            var exerciseDuration = exercise.duration.toString() + "s"
+            countdownTimer.text = exerciseDuration
 
             countdown = (exercise.duration * 1000).toLong()
 
             timer = object : CountDownTimer2(countdown, 1000, true) {
 
                 override fun onTick(millisUntilFinished: Long) {
-                    countdownTimer.text = (millisUntilFinished/1000).toString() + "s"
+                    exerciseDuration = (millisUntilFinished/1000).toString() + "s"
+                    countdownTimer.text = exerciseDuration
                 }
 
                 override fun onFinish() {
                     countdownButton.isEnabled = false
-                    countdownTimer.text = "Finished"
+                    countdownTimer.text = getString(R.string.finished)
                 }
             }
 

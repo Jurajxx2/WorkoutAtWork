@@ -1,5 +1,6 @@
 package net.trasim.workoutinwork.adapters
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import net.trasim.workoutinwork.database.exercises
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.objects.Workout
 
-class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private val exercises: List<Exercise>) : RecyclerView.Adapter<WorkoutsRecycleAdapter.MyViewHolder>() {
+class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private val exercises: List<Exercise>, private val context: Context) : RecyclerView.Adapter<WorkoutsRecycleAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.workoutName)
@@ -33,7 +34,7 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
 
         holder.title.text = exercise.name
         if (workout.repetitions>0){
-            holder.done.text = "Repetitions: "
+            holder.done.text = context.getString(R.string.repetitions)
             holder.repetitions.text = workout.repetitions.toString() + "x"
         } else if (workout.duration>0){
             holder.done.text = "Duration: "

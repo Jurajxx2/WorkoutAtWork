@@ -76,10 +76,6 @@ class MainActivity : AppCompatActivity() {
         reminder = sharedPref.getBoolean("workout_reminder", false)
         databaseInit = sharedPref.getBoolean("database", false)
 
-        val day = sharedPref.getString("select_days_time", "0")
-        val lunchStart = sharedPref.getString("lunch_start", "0")
-        val lunchEnd = sharedPref.getString("lunch_end", "0")
-
         val alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, MyBroadcastReceiver::class.java)
         val alarmIntent = PendingIntent.getBroadcast(this.applicationContext, 0, intent, 0)
@@ -133,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     saveSharedPref()
                 } else {
 
-                    enableReminder.text = "Disable workout reminder"
+                    enableReminder.text = getString(R.string.disable_workout_reminder)
 
                     myCalender.set(Calendar.HOUR_OF_DAY, hour)
                     myCalender.set(Calendar.MINUTE, minute)
@@ -162,13 +158,10 @@ class MainActivity : AppCompatActivity() {
 
                     nextAlarm.text = nextAlarmTime
                 }
-            } else {
-                setInterval.isEnabled = false
-                skipWorkout.isEnabled = false
             }
 
         } else {
-            //Initialise database - need data about exercises and tips
+            //Initialise database - need data about exercises and tips + initialise default values for settings
             PreferenceManager.setDefaultValues(this, R.xml.pref_general, false)
             if (!databaseInit) {
                 doAsync { DatabaseInit(this@MainActivity) }
@@ -197,28 +190,28 @@ class MainActivity : AppCompatActivity() {
             mDrawerLayout.closeDrawers()
             when (menuItem.itemId) {
                 R.id.home_btn -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, MainActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.workouts_history_btn -> {
-                    val intent = Intent(this, WorkoutHistoryActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, WorkoutHistoryActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.settings_btn -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, SettingsActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.workout_list_btn -> {
-                    val intent = Intent(this, WorkoutListActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, WorkoutListActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
                 R.id.info -> {
-                    val intent = Intent(this, InfoActivity::class.java)
-                    startActivity(intent)
+                    val menuIntent = Intent(this, InfoActivity::class.java)
+                    startActivity(menuIntent)
                     finish()
                 }
             }
@@ -229,23 +222,17 @@ class MainActivity : AppCompatActivity() {
         //Enable reminder button - onclick updates times of next reminder and interval
         enableReminder.setOnClickListener {
             if (reminder) {
-                setInterval.isEnabled = false
-                skipWorkout.isEnabled = false
-
-                enableReminder.text = "Enable workout reminder"
+                enableReminder.text = getString(R.string.enable_workout_reminder)
                 reminder = false
-                alarmMgr?.cancel(alarmIntent)
+                alarmMgr.cancel(alarmIntent)
                 reminderInterval.text = "_ _ : _ _"
                 nextAlarm.text = "_ _ : _ _"
 
             } else {
-                setInterval.isEnabled = true
-                skipWorkout.isEnabled = true
-
                 val myCalender = Calendar.getInstance()
                 val hour = myCalender.get(Calendar.HOUR_OF_DAY)
                 val minute = myCalender.get(Calendar.MINUTE)
-                enableReminder.text = "Disable workout reminder"
+                enableReminder.text = getString(R.string.disable_workout_reminder)
                 reminder = true
                 workoutNextReminder = System.currentTimeMillis()
 
@@ -301,6 +288,10 @@ class MainActivity : AppCompatActivity() {
 
         //Set interval for workout reminder
         setInterval.setOnClickListener {
+            if(!reminder){
+                toast("Enable reminder to set interval")
+                return@setOnClickListener
+            }
             val myCalender = Calendar.getInstance()
             val hour = myCalender.get(Calendar.HOUR_OF_DAY)
             val minute = myCalender.get(Calendar.MINUTE)
@@ -387,6 +378,8 @@ class MainActivity : AppCompatActivity() {
 
                 nextAlarm.text = nextAlarmTime
                 saveSharedPref()
+            } else {
+                toast("Enable reminder to skip interval")
             }
         }
     }
@@ -446,4 +439,5 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
+
 }

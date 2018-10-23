@@ -8,11 +8,7 @@ import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import net.trasim.workoutinwork.database.AppDatabase
-import net.trasim.workoutinwork.objects.User
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
-import java.util.*
 
 class DialogActivity : Activity() {
 

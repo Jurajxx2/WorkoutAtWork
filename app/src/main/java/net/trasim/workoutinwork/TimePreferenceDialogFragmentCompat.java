@@ -24,8 +24,11 @@ public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragment
         super.onBindDialogView(v);
         timePicker.setIs24HourView(true);
         TimePreference pref = (TimePreference) getPreference();
-        timePicker.setCurrentHour(pref.hour);
-        timePicker.setCurrentMinute(pref.minute);
+        //timePicker.setCurrentHour(pref.hour);
+        //timePicker.setCurrentMinute(pref.minute);
+
+        timePicker.setHour(pref.hour);
+        timePicker.setMinute(pref.minute);
     }
 
     @Override
@@ -34,8 +37,11 @@ public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragment
         if (positiveResult)
         {
             TimePreference pref = (TimePreference) getPreference();
-            pref.hour = timePicker.getCurrentHour();
-            pref.minute = timePicker.getCurrentMinute();
+            //pref.hour = timePicker.getCurrentHour();
+            //pref.minute = timePicker.getCurrentMinute();
+
+            pref.hour = timePicker.getHour();
+            pref.minute = timePicker.getMinute();
 
             String value = TimePreference.timeToString(pref.hour, pref.minute);
             if (pref.callChangeListener(value)) pref.persistStringValue(value);
