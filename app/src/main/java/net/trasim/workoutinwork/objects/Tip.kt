@@ -12,15 +12,21 @@ class Tip {
     var id: Int = 0
 
     @ColumnInfo(name = "heading")
-    var heading: String = ""
+    var headingEN: String = ""
+    @ColumnInfo(name = "headingsk")
+    var headingSK: String = ""
     @ColumnInfo(name = "text")
-    var text: String = ""
+    var textEN: String = ""
+    @ColumnInfo(name = "textsk")
+    var textSK: String = ""
 
     constructor()
 
     @Ignore
-    constructor(heading: String, text: String){
-        this.heading = heading
-        this.text = text
+    constructor(headingEN: String, headingSK: String, textEN: String, textSK: String){
+        this.headingEN = headingEN
+        this.headingSK = headingSK
+        this.textEN = textEN
+        this.textSK = textSK
     }
 }

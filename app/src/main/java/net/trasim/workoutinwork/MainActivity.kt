@@ -26,6 +26,7 @@ import android.support.v7.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import net.trasim.workoutinwork.database.Data4to5
 import net.trasim.workoutinwork.objects.Tip
 
 class MainActivity : AppCompatActivity() {
@@ -58,6 +59,8 @@ class MainActivity : AppCompatActivity() {
     private var reminder: Boolean = false
     private var databaseInit: Boolean = false
 
+    private var language: String = ""
+
     private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +92,9 @@ class MainActivity : AppCompatActivity() {
         hintHeading = findViewById(R.id.hintHeading)
         hintText = findViewById(R.id.hintText)
 
+        //Get language
+        language = Locale.getDefault().isO3Language
+
 
         //If initial settings were saved
         if(isOK){
@@ -99,15 +105,25 @@ class MainActivity : AppCompatActivity() {
                 workdays = database.workdayModel().allWorkdays
                 tips = database.tipModel().allTips
 
+                if (tips.isEmpty()){
+                    Data4to5(this@MainActivity)
+                }
+
                 uiThread {
                     val randomNr = (0 until tips.size).random()
 
                     lastWorkday = workdays[workdays.size - 1]
 
-                    hintHeading.text = tips[randomNr].heading
-                    hintText.text = tips[randomNr].text
+                    if (language == "SK") {
+                        hintHeading.text = tips[randomNr].headingSK
+                        hintText.text = tips[randomNr].textSK
 
-                    if (hintText.text.length>120){
+                    } else {
+                        hintHeading.text = tips[randomNr].headingEN
+                        hintText.text = tips[randomNr].textEN
+                    }
+
+                    if (hintText.text.length > 120) {
                         hintText.movementMethod = ScrollingMovementMethod.getInstance()
                     }
                 }

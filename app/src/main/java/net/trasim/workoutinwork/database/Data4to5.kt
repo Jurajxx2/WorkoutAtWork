@@ -8,10 +8,8 @@ import net.trasim.workoutinwork.objects.Workout
 
 private var exercises: ArrayList<Exercise> = ArrayList(20)
 private var tips: ArrayList<Tip> = ArrayList(10)
-private var initialWorkout: Workout = Workout(0)
-private var initialWorkday: Workday = Workday("0", 0, 0, 0)
 
-class DatabaseInit(activity: Activity) {
+class Data4to5(activity: Activity) {
 
     init {
         exercises.add(Exercise("Jumping jacks", "Poskoky s odrazom", "Do jumping jacks!", "Robte poskoky s odrazom!", "Jump from a standing position to a position with legs spread and arms raised and then back to the original position.", "Skočte zo stoja do polohy s roztiahnutými nohami a zdvihnutými rukami a potom späť do pôvodnej polohy.", 20, 0, "jacks", true))
@@ -37,8 +35,5 @@ class DatabaseInit(activity: Activity) {
         for (tip in tips) {
             AppDatabase.getInstance(activity).tipModel().insertTip(tip)
         }
-
-        AppDatabase.getInstance(activity).workdayModel().insertWorkday(initialWorkday)
-        AppDatabase.getInstance(activity).workoutModel().insertWorkout(initialWorkout)
     }
 }

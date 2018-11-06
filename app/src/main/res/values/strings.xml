@@ -226,6 +226,7 @@
     <string name="disable_workout_reminder">Disable workout reminder</string>
     <string name="pause">Pause</string>
     <string name="finished">Finished</string>
+    <string name="duration">Duration:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

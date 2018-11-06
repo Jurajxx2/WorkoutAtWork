@@ -40,7 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(){
         lunchEnd = findPreference("lunch_end") as TimePreference
 
         //Listeners that listens to start, end lunch time should not be before start time and start should not be after end
-        startListener = Preference.OnPreferenceChangeListener{ preference: Preference, any: Any ->
+        startListener = Preference.OnPreferenceChangeListener{ _: Preference, any: Any ->
             val calendar1 = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, any.toString().substring(0,2).toInt())
@@ -61,7 +61,7 @@ class SettingsFragment : PreferenceFragmentCompat(){
         }
 
         //Listeners that listens to end, end lunch time should not be before start time and start should not be after end
-        endListener = Preference.OnPreferenceChangeListener{ preference: Preference, any: Any ->
+        endListener = Preference.OnPreferenceChangeListener{ _: Preference, any: Any ->
             val calendar1 = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, any.toString().substring(0,2).toInt())

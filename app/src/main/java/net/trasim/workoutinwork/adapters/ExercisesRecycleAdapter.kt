@@ -14,6 +14,7 @@ import net.trasim.workoutinwork.database.AppDatabase
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.util.*
 
 class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesRecycleAdapter.MyViewHolder>() {
 
@@ -38,7 +39,15 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         //Get exercise
         val exercises = exercisesList[position]
-        holder.title.text = exercises.name
+
+        //Get language code
+        val language = Locale.getDefault().isO3Language
+
+        if (language == "SK") {
+            holder.title.text = exercises.nameSK
+        } else {
+            holder.title.text = exercises.nameEN
+        }
 
         when(exercises.img){
             "pushup" -> holder.img.setImageResource(R.drawable.pushup)
@@ -87,7 +96,14 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
-            holder.description.text = exercises.description + description
+
+            val popis = if (language == "SK"){
+                exercises.descriptionSK!! + description
+            } else {
+                exercises.descriptionEN!! + description
+            }
+
+            holder.description.text = popis
         }
 
         holder.minus.setOnClickListener {
@@ -110,7 +126,13 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
-            holder.description.text = exercises.description + description
+            val popis: String = if (language == "SK"){
+                exercises.descriptionSK!! + description
+            } else {
+                exercises.descriptionEN!! + description
+            }
+
+            holder.description.text = popis
         }
 
         if (exercises.duration>0){
@@ -118,7 +140,14 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         } else if (exercises.repetitions>0){
             description = "\nDo it " + exercises.repetitions.toString() + " times"
         }
-        holder.description.text = exercises.description + description
+
+        val popis = if (language == "SK"){
+            exercises.descriptionSK!! + description
+        } else {
+            exercises.descriptionEN!! + description
+        }
+
+        holder.description.text = popis
     }
 
     override fun getItemCount(): Int {

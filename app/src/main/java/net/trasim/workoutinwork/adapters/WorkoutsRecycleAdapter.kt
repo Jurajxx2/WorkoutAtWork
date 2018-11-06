@@ -1,5 +1,6 @@
 package net.trasim.workoutinwork.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import net.trasim.workoutinwork.R
-import net.trasim.workoutinwork.R.id.exercisesList
-import net.trasim.workoutinwork.database.exercises
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.objects.Workout
+import java.util.*
 
 class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private val exercises: List<Exercise>, private val context: Context) : RecyclerView.Adapter<WorkoutsRecycleAdapter.MyViewHolder>() {
 
@@ -32,14 +32,24 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
         val workout = workoutsList[position]
         val exercise = exercises[workout.exerciseID - 1]
 
-        holder.title.text = exercise.name
+        //get language code
+        val language = Locale.getDefault().isO3Language
+
+        if (language == "SK"){
+            holder.title.text = exercise.nameSK
+        } else {
+            holder.title.text = exercise.nameEN
+        }
+
+        var repetitions = ""
         if (workout.repetitions>0){
             holder.done.text = context.getString(R.string.repetitions)
-            holder.repetitions.text = workout.repetitions.toString() + "x"
+            repetitions = workout.repetitions.toString() + "x"
         } else if (workout.duration>0){
-            holder.done.text = "Duration: "
-            holder.repetitions.text = workout.duration.toString() + "s"
+            holder.done.text = context.getString(R.string.duration)
+            repetitions = workout.duration.toString() + "s"
         }
+        holder.repetitions.text = repetitions
     }
 
     override fun getItemCount(): Int {

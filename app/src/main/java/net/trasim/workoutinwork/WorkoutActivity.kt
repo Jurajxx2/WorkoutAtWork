@@ -62,6 +62,8 @@ class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var timer: CountDownTimer2
 
+    private var language: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
@@ -89,6 +91,9 @@ class WorkoutActivity : AppCompatActivity() {
         workoutNextReminder = sharedPref.getLong("next_interval", 0)
         reminder = sharedPref.getBoolean("workout_reminder", false)
         exercisesInWorkout = sharedPref.getString("noOfExercises", "4").toInt()
+
+        //Get language
+        language = Locale.getDefault().isO3Language
 
         //If reminder is on, refresh next time interval
         if (reminder){
@@ -266,7 +271,12 @@ class WorkoutActivity : AppCompatActivity() {
             buttonNext.visibility = View.INVISIBLE
         }
 
-        title.text = exercise.name
+        if (language == "SK"){
+            title.text = exercise.nameSK
+        } else {
+            title.text = exercise.nameEN
+        }
+
         when(exercise.img){
             "pushup" -> img.setImageResource(R.drawable.pushup)
             "jacks" -> img.setImageResource(R.drawable.jacks)
@@ -319,7 +329,12 @@ class WorkoutActivity : AppCompatActivity() {
             database.workoutModel().insertWorkout(mWorkout)
         }
 
-        description.text = exercise.description
+        if (language == "SK"){
+            description.text = exercise.descriptionSK
+        } else {
+            description.text = exercise.descriptionEN
+        }
+
         intensity.text = popis
     }
 

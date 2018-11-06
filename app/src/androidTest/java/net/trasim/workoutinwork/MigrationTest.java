@@ -37,7 +37,7 @@ public class MigrationTest {
         // db has schema version 1. insert some data using SQL queries.
         // You cannot use DAO classes because they expect the latest schema.
         db.execSQL("CREATE TABLE IF NOT EXISTS `$TEST_DB` " +
-                "(`id` NUMBER, `name` TEXT NOT NULL, `heading` TEXT NOT NULL, `description` TEXT NOT NULL, `duration` NUMBER, `duration` NUMBER, `img` TEXT NOT NULL, `isEnabled` BOOLEAN," +
+                "(`id` NUMBER, `name` TEXT NOT NULL, `namesk` TEXT NOT NULL, `heading` TEXT NOT NULL, `headingsk` TEXT NOT NULL, `description` TEXT NOT NULL, `descriptionsk` TEXT NOT NULL, `duration` NUMBER, `duration` NUMBER, `img` TEXT NOT NULL, `isEnabled` BOOLEAN," +
                 "PRIMARY KEY(`id`))");
 
         db.execSQL("INSERT INTO `$TEST_DB` (game_name) "

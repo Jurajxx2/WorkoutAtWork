@@ -85,7 +85,7 @@ class WorkoutHistoryActivity : AppCompatActivity() {
         }
 
         //On click listener to some date in calendar
-        mCalendarView.setOnDateChangedListener { _ , calendarDay, b ->
+        mCalendarView.setOnDateChangedListener { _ , calendarDay, _ ->
             for (workday in workdays){
                 val c = Calendar.getInstance()
                 c.timeInMillis = workday.date.toLong()
