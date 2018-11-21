@@ -35,7 +35,7 @@ class WorkoutsRecycleAdapter(private val workoutsList: List<Workout>, private va
         //get language code
         val language = Locale.getDefault().isO3Language
 
-        if (language == "SK"){
+        if (language == "slk"){
             holder.title.text = exercise.nameSK
         } else {
             holder.title.text = exercise.nameEN

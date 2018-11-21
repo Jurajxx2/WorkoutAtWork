@@ -13,15 +13,15 @@ class Exercise {
 
     @ColumnInfo(name = "name")
     var nameEN: String? = null
-    @ColumnInfo(name = "namesk")
+    @ColumnInfo(name = "nameSK")
     var nameSK: String? = null
     @ColumnInfo(name = "heading")
     var headingEN: String? = null
-    @ColumnInfo(name = "headingsk")
+    @ColumnInfo(name = "headingSK")
     var headingSK: String? = null
     @ColumnInfo(name = "description")
     var descriptionEN: String? = null
-    @ColumnInfo(name = "descriptionsk")
+    @ColumnInfo(name = "descriptionSK")
     var descriptionSK: String? = null
     @ColumnInfo(name = "repetitions")
     var repetitions: Int = 0

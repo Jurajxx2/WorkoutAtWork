@@ -43,7 +43,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         //Get language code
         val language = Locale.getDefault().isO3Language
 
-        if (language == "SK") {
+        if (language == "slk") {
             holder.title.text = exercises.nameSK
         } else {
             holder.title.text = exercises.nameEN
@@ -87,17 +87,25 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         holder.plus.setOnClickListener {
             if (exercises.duration>0){
                 exercises.duration += 1
-                description = "\nDo it for " + exercises.duration.toString() + " seconds"
+                description = if (language == "slk") {
+                    "\nCvičte " + exercises.duration.toString() + "s"
+                } else {
+                    "\nDo it for " + exercises.duration.toString() + "s"
+                }
             } else if (exercises.repetitions>0){
                 exercises.repetitions += 1
-                description = "\nDo it " + exercises.repetitions.toString() + " times"
+                description = if (language == "slk") {
+                    "\nZopakujte " + exercises.repetitions.toString() + "x"
+                } else {
+                    "\nDo it " + exercises.repetitions.toString() + "x"
+                }
             }
             doAsync {
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
 
-            val popis = if (language == "SK"){
+            val popis = if (language == "slk"){
                 exercises.descriptionSK!! + description
             } else {
                 exercises.descriptionEN!! + description
@@ -110,14 +118,22 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
             if (exercises.duration>0){
                 if(exercises.duration != 1) {
                     exercises.duration -= 1
-                    description = "\nDo it for " + exercises.duration.toString() + " seconds"
+                    description = if (language == "slk") {
+                        "\nCvičte " + exercises.duration.toString() + "s"
+                    } else {
+                        "\nDo it for " + exercises.duration.toString() + "s"
+                    }
                 } else {
                     Toast.makeText(context, "Cannot change duration to 0s", Toast.LENGTH_SHORT).show()
                 }
             } else if (exercises.repetitions>0){
                 if(exercises.repetitions != 1) {
                     exercises.repetitions -= 1
-                    description = "\nDo it " + exercises.repetitions.toString() + " times"
+                    description = if (language == "slk") {
+                        "\nZopakujte " + exercises.repetitions.toString() + "x"
+                    } else {
+                        "\nDo it " + exercises.repetitions.toString() + "x"
+                    }
                 } else {
                     Toast.makeText(context, "Cannot change repetitions to 0x", Toast.LENGTH_SHORT).show()
                 }
@@ -126,7 +142,7 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
                 val database = AppDatabase.getInstance(context)
                 database.exerciseModel().updateExercise(exercises)
             }
-            val popis: String = if (language == "SK"){
+            val popis: String = if (language == "slk"){
                 exercises.descriptionSK!! + description
             } else {
                 exercises.descriptionEN!! + description
@@ -136,12 +152,20 @@ class ExercisesRecycleAdapter(private val exercisesList: List<Exercise>, private
         }
 
         if (exercises.duration>0){
-            description = "\nDo it for " + exercises.duration.toString() + " seconds"
+            description = if (language == "slk") {
+                "\nCvičte " + exercises.duration.toString() + "s"
+            } else {
+                "\nDo it for " + exercises.duration.toString() + "s"
+            }
         } else if (exercises.repetitions>0){
-            description = "\nDo it " + exercises.repetitions.toString() + " times"
+            description = if (language == "slk") {
+                "\nZopakujte " + exercises.repetitions.toString() + "x"
+            } else {
+                "\nDo it " + exercises.repetitions.toString() + "x"
+            }
         }
 
-        val popis = if (language == "SK"){
+        val popis = if (language == "slk"){
             exercises.descriptionSK!! + description
         } else {
             exercises.descriptionEN!! + description

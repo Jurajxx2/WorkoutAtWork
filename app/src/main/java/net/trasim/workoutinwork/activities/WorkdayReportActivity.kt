@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
+import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.adapters.WorkoutsRecycleAdapter
 import net.trasim.workoutinwork.database.AppDatabase
 import org.jetbrains.anko.doAsync

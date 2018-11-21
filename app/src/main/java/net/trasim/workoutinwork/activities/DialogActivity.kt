@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import net.trasim.workoutinwork.R
 import org.jetbrains.anko.toast
 
 class DialogActivity : Activity() {

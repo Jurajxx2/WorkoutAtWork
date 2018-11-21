@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.recievers
 
 import android.app.*
 import android.content.BroadcastReceiver
@@ -13,6 +13,8 @@ import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.widget.Toast
+import net.trasim.workoutinwork.R
+import net.trasim.workoutinwork.activities.WorkoutActivity
 import java.util.*
 
 class MyBroadcastReceiver : BroadcastReceiver() {
@@ -31,12 +33,9 @@ class MyBroadcastReceiver : BroadcastReceiver() {
     private var dailyReminder: Long = 0
     private lateinit var days: Set<String>
 
-    //private var vibrations: Boolean = false
-    //private var sounds: Boolean = false
-
     override fun onReceive(context: Context, intent: Intent) {
 
-        Toast.makeText(context, "test", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Alarm", Toast.LENGTH_LONG).show()
 
         //Define alarmmanager
         val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -56,6 +55,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
         //If was launched after boot completed
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
+
             setDailyAlarm(context)
 
             if (reminder) {
@@ -69,25 +69,14 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                     return
                 }
             }
+            return
         }
 
         //Otherwise set last reminder launch time to actual time
         workoutNextReminder = System.currentTimeMillis()
+        reminder = true
         saveSharedPref()
 
-        //If reminder was turned off (by restarting device maybe), then turn reminder on
-        if (!reminder) {
-//            alarmMgr.setRepeating(
-//                    AlarmManager.RTC_WAKEUP,
-//                    System.currentTimeMillis() + workoutReminderInterval,
-//                    workoutReminderInterval,
-//                    alarmIntent
-//            )
-//
-//            reminder = true
-//            saveSharedPref()
-            return
-        }
 
         //If lunch break option is true, check if this time is not during lunch break, otherwise return
         if (sharedPref.getBoolean("lunch_break", false)) {
@@ -184,13 +173,20 @@ class MyBroadcastReceiver : BroadcastReceiver() {
     }
 
     //Set daily alarm function for days in list form settings
-    private fun setDailyAlarm(context: Context) {
+    //Function to set daily alarm based on list of days from settings
+    private fun setDailyAlarm(context: Context){
         days.forEach {
-            when (it) {
+            when(it){
                 "1" -> {
                     val calendar: Calendar = Calendar.getInstance().apply {
                         timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 0)
+                        set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+                    }
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -199,15 +195,20 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
                     )
                 }
-                "2" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 1)
+                "2" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
+                }
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -216,15 +217,19 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
+                    ) }
+                "3" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
                 }
-                "3" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 2)
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -233,15 +238,19 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
+                    ) }
+                "4" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
                 }
-                "4" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 3)
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -250,15 +259,19 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
+                    ) }
+                "5" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
                 }
-                "5" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 4)
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -267,15 +280,19 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
+                    ) }
+                "6" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
                 }
-                "6" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 5)
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -284,15 +301,19 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
+                    ) }
+                "7" -> { val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = dailyReminder
+                    set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
                 }
-                "7" -> {
-                    val calendar: Calendar = Calendar.getInstance().apply {
-                        timeInMillis = dailyReminder
-                        set(Calendar.DAY_OF_WEEK, 6)
+
+                    val timeFromNow = if(calendar.timeInMillis>System.currentTimeMillis()){
+                        calendar.timeInMillis-System.currentTimeMillis()
+                    } else {
+                        calendar.timeInMillis-System.currentTimeMillis() + 604800000
                     }
 
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -301,11 +322,10 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
                     alarmMgr2.setRepeating(
                             AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
+                            System.currentTimeMillis() + timeFromNow,
                             604800000,
                             alarmIntent2
-                    )
-                }
+                    ) }
                 else -> {
                     val alarmMgr2 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent2 = Intent(context, MyBroadcastReceiver::class.java)
@@ -316,6 +336,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             }
         }
     }
+
 
     private fun conversion(time: String): Long {
         val calendar = Calendar.getInstance().apply {

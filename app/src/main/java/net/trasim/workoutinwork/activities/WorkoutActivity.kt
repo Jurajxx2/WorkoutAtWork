@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -18,10 +18,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.objects.Exercise
 import net.trasim.workoutinwork.objects.Workday
 import net.trasim.workoutinwork.objects.Workout
+import net.trasim.workoutinwork.recievers.MyBroadcastReceiver
+import net.trasim.workoutinwork.tools.CountDownTimer2
 import org.jetbrains.anko.*
 import java.util.*
 
@@ -271,7 +274,7 @@ class WorkoutActivity : AppCompatActivity() {
             buttonNext.visibility = View.INVISIBLE
         }
 
-        if (language == "SK"){
+        if (language == "slk"){
             title.text = exercise.nameSK
         } else {
             title.text = exercise.nameEN
@@ -296,7 +299,11 @@ class WorkoutActivity : AppCompatActivity() {
         var popis = ""
         if (exercise.duration>0){
             mWorkout.duration = exercise.duration
-            popis = "Do it for " + exercise.duration.toString() + " seconds"
+            popis = if(language=="slk"){
+                "Cvičte " + exercise.duration.toString() + " sekúnd"
+            } else {
+                "Do it for " + exercise.duration.toString() + " seconds"
+            }
             countdownButton.visibility = View.VISIBLE
             countdownButton.text = getString(R.string.start)
             countdownButton.isEnabled = true
@@ -322,14 +329,18 @@ class WorkoutActivity : AppCompatActivity() {
 
         } else if (exercise.repetitions>0){
             mWorkout.repetitions = exercise.repetitions
-            popis = "Do it " + exercise.repetitions.toString() + " times"
+            popis = if(language=="slk"){
+                "Zopakujte " + exercise.repetitions.toString() + " krát"
+            } else {
+                "Do it " + exercise.repetitions.toString() + " times"
+            }
         }
 
         doAsync {
             database.workoutModel().insertWorkout(mWorkout)
         }
 
-        if (language == "SK"){
+        if (language == "slk"){
             description.text = exercise.descriptionSK
         } else {
             description.text = exercise.descriptionEN
@@ -367,7 +378,7 @@ class WorkoutActivity : AppCompatActivity() {
         }
 
         this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to finish workout", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.click_again_workout), Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }

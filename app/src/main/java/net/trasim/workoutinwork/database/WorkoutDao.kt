@@ -22,6 +22,9 @@ interface WorkoutDao {
     @Query("SELECT * FROM Workouts where workdayID = :workdayID")
     fun getWorkoutsByWorkdayID(workdayID: Int): List<Workout>
 
+    @Query("DELETE FROM Workouts")
+    fun deleteAllWorkouts()
+
     @Insert
     fun insertWorkout(Workout: Workout)
 

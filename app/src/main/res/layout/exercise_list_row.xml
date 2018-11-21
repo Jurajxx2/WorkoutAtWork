@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="260dp">
+    android:layout_height="300dp">
 
     <ImageView
         android:id="@+id/background"
-        android:layout_width="650dp"
+        android:layout_width="730dp"
         android:layout_height="400dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/background_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.36"
-        app:srcCompat="@drawable/background"
-        android:contentDescription="@string/background_image" />
+        app:srcCompat="@drawable/background" />
 
     <TextView
         android:id="@+id/exerciseName"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/exerciseDescription"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/loading"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/exerciseName"
-        app:layout_constraintStart_toStartOf="@+id/exerciseName"
+        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/exerciseGif"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/triceps"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,11 +63,11 @@
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/use_in_workout"
-        app:layout_constraintBottom_toBottomOf="@+id/exerciseName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/exerciseName"
-        app:layout_constraintTop_toTopOf="@+id/exerciseName" />
+        app:layout_constraintStart_toEndOf="@+id/exerciseDescription"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
 
     <TextView
         android:id="@+id/intensity"
@@ -84,13 +85,13 @@
         android:id="@+id/plus"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="120dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/plus_sign"
         android:textColor="@color/colorBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/intensity" />
 
     <Button
         android:id="@+id/minus"

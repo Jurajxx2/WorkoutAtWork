@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -26,8 +26,9 @@ import android.support.v7.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import net.trasim.workoutinwork.database.Data4to5
+import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.objects.Tip
+import net.trasim.workoutinwork.recievers.MyBroadcastReceiver
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         language = Locale.getDefault().isO3Language
 
 
+
         //If initial settings were saved
         if(isOK){
 
@@ -105,16 +107,13 @@ class MainActivity : AppCompatActivity() {
                 workdays = database.workdayModel().allWorkdays
                 tips = database.tipModel().allTips
 
-                if (tips.isEmpty()){
-                    Data4to5(this@MainActivity)
-                }
 
                 uiThread {
                     val randomNr = (0 until tips.size).random()
 
                     lastWorkday = workdays[workdays.size - 1]
 
-                    if (language == "SK") {
+                    if (language == "slk") {
                         hintHeading.text = tips[randomNr].headingSK
                         hintText.text = tips[randomNr].textSK
 
@@ -451,7 +450,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.one_more_click), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, language, Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }

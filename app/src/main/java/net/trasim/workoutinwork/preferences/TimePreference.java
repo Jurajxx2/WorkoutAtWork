@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork;
+package net.trasim.workoutinwork.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;

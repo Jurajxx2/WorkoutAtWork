@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -7,6 +7,9 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
+import net.trasim.workoutinwork.R
+import net.trasim.workoutinwork.preferences.TimePreference
+import net.trasim.workoutinwork.preferences.TimePreferenceDialogFragmentCompat
 import java.util.*
 
 /**

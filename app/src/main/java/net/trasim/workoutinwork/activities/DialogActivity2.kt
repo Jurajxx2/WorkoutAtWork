@@ -1,9 +1,10 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import net.trasim.workoutinwork.R
 
 class DialogActivity2 : AppCompatActivity() {
 

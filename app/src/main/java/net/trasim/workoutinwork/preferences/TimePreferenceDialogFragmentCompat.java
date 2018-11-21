@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork;
+package net.trasim.workoutinwork.preferences;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;

@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork;
+package net.trasim.workoutinwork.tools;
 
 import android.os.Handler;
 import android.os.Message;

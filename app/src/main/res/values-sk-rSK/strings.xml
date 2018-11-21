@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="info">Informácie</string>
+    <string name="home">Domov</string>
+    <string name="do_workout">Začať cvičenie</string>
+    <string name="workouts_history">História</string>
+    <string name="options">Možnosti</string>
+    <string name="settings">Nastavenia</string>
+    <string name="workout_s_list">Zoznam cvikov</string>
+    <string name="set">Nastaviť</string>
+    <string name="cancel">Zrušiť</string>
+    <string name="title_activity_settings">Nastavenia</string>
+    <string name="reminder">Pripomienka</string>
+    <string name="next_reminder">Ďalšia pripomienka</string>
+    <string name="reminder_interval">Interval pripomienok</string>
+    <string name="skip_workout">Preskočiť cvičenie</string>
+    <string name="set_interval">Nastaviť interval</string>
+    <string name="enable_workout_reminder">Povoliť pripomienky cvičenia</string>
+    <string name="start_workout">Začať cvičenie</string>
+    <string name="default_hint_header">Pi dostatok tekutín</string>
+    <string name="info_label">info icona</string>
+    <string name="welcome_heading">Vitajte v aplikácií Work Workout</string>
+    <string name="fill_data_notice">Prosím, vyplňte základné údaje o vás pre štatistické účely</string>
+    <string name="enter_weight">Vaša váha v kg</string>
+    <string name="enter_height">Vaša výška v cm</string>
+    <string name="finish">Ukončiť</string>
+    <string name="next">Ďalšie</string>
+    <string name="page">1 z 2</string>
+    <string name="basic_terms_heading">Niektoré základné pojmy</string>
+    <string name="workout_reminder">Upozornenia na cvičenia</string>
+    <string name="workout_reminder_definition">- môžete nastaviť upozornenie na cvičenie počas dňa vo zvolenom intervale</string>
+    <string name="daily_reminder">Denná pripomienka</string>
+    <string name="daily_reminder_definition">- v nastaveniach môžete nastaviť dni, kedy sa nastaví pripomienka na začatie cvičenia</string>
+    <string name="exercise_and_workout">Cvičenia a cviky</string>
+    <string name="exercise_and_workout_definition">- cvik je jedna špecifická aktivita a časť cvičenia. Môžete si zvoliť, ktoré cviky chcete robiť počas cvičenia a ktoré nie.</string>
+    <string name="start_app">Spustiť aplikáciu</string>
+    <string name="page2">2 z 2</string>
+    <string name="day">Deň:</string>
+    <string name="first_workout">Prvé cvičenie:</string>
+    <string name="last_workout">Posledné cvičenie:</string>
+    <string name="workouts_done">Vykonaných tréningov</string>
+    <string name="loading">Načítavanie</string>
+    <string name="end_workout">Ukončiť cvičenie</string>
+    <string name="finish_today">Ukončiť na dnes</string>
+    <string name="next_exercise">Ďalší cvik</string>
+    <string name="start">Štart</string>
+    <string name="workouts_done_heading">Vykonaných tréningov</string>
+    <string name="workdays_done">Odcvičené pracovné dni</string>
+    <string name="background_image">pozadie</string>
+    <string name="use_in_workout">Použiť počas cvičenia?</string>
+    <string name="edit_intensity">Zmeniť intenzitu:</string>
+    <string name="repetitions">Opakovania:</string>
+    <string name="disable_workout_reminder">Zrušiť upozornenia na cvičenie</string>
+    <string name="pause">Pozastaviť</string>
+    <string name="finished">Ukončené</string>
+    <string name="duration">Trvanie:</string>
+    <string name="one_more_click">Prosím, kliknite ešte raz na tlačidlo späť</string>
+    <string name="initial_setup">Prvé nastavenie</string>
+    <string name="workout">Cvičenie</string>
+    <string name="workout_reminder_description">Zvoľte si interval medzi cvičeniami</string>
+    <string name="select_workout_reminder_interval">Zvoľte si interval upozornenia pre cvičenia</string>
+    <string name="daily_reminder_description">Ak je denné upozornenie zapnuté, upozornenie pre cvičenie začne vo zvolené dni</string>
+    <string name="select_days">Zvoľte si dni</string>
+    <string name="select_days_description">Zvoľte si na ktoré dni, v ktoré sa spustí upozornenie na cvičenia</string>
+    <string name="lunch_break">Obedná prestávka</string>
+    <string name="lunch_break_description">Ak by sa malo spustiť upozornenie pre cvičenia počas zvolenej doby, cvičenie bude automaticky preskočené a upozornenie sa nezobrazí</string>
+    <string name="workout_settings">Nastavenia cvičenia</string>
+    <string name="number_of_exercises">Počet cvikov</string>
+    <string name="number_of_exercises_description">Zvoľte si počet cvikov v jednom tréningu(cvičení)</string>
+    <string name="lunch_start">Začiatok obednej prestávky</string>
+    <string name="lunch_end">Koniec obednej prestávky</string>
+    <string name="user_settings">Nastavenia používateľa</string>
+    <string name="gender">Pohlavie</string>
+    <string name="age">Vek</string>
+    <string name="weight">Hmotnosť</string>
+    <string name="height">Výška</string>
+    <string name="reminders">Upozornenia</string>
+    <string name="daily_reminder_time">Čas denného upozornenia</string>
+    <string name="daily_reminder_time_description">Zvoľte si čas, v ktorý chcete začať pre zvolené dni</string>
+    <string name="click_again_workout">Kliknite znova pre ukončenie cvičenia</string>
+
+    <string-array name="days">
+        <item>Poňdelok</item>
+        <item>Utorok</item>
+        <item>Streda</item>
+        <item>Štvrtok</item>
+        <item>Piatok</item>
+        <item>Sobota</item>
+        <item>Nedeľa</item>
+    </string-array>
+
+    <string-array name="age">
+        <item>Váš vek</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Muž</item>
+        <item>Žena</item>
+    </string-array>
+
+    <string-array name="reminder">
+        <item>Žiadne upozornenie</item>
+        <item>Každých 30 minút</item>
+        <item>Každú hodinu</item>
+        <item>Každé 2 hodiny</item>
+        <item>Každé 3 hodiny</item>
+        <item>Každé 4 hodiny</item>
+    </string-array>
+    <string name="app_name">Work Workout - Tréning v práci</string>
+</resources>

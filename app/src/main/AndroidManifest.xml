@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -21,34 +21,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WorkoutHistoryActivity"
-            android:label="Records" />
+            android:name=".activities.WorkoutHistoryActivity"
+            android:label="@string/workouts_history" />
         <activity
-            android:name=".WorkoutActivity"
-            android:label="Workout" />
+            android:name=".activities.WorkoutActivity"
+            android:label="@string/workout" />
         <activity
-            android:name=".WorkoutListActivity"
-            android:label="List of exercises" />
+            android:name=".activities.WorkoutListActivity"
+            android:label="@string/workout_s_list" />
         <activity
-            android:name=".InfoActivity"
-            android:label="Info" />
+            android:name=".activities.InfoActivity"
+            android:label="@string/info" />
         <activity
-            android:name=".DialogActivity"
-            android:label="Initial setup" />
+            android:name=".activities.DialogActivity"
+            android:label="@string/initial_setup" />
         <activity
-            android:name=".DialogActivity2"
-            android:label="Initial setup" />
+            android:name=".activities.DialogActivity2"
+            android:label="@string/initial_setup" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
 
-        <activity android:name=".WorkdayReportActivity"
+        <activity android:name=".activities.WorkdayReportActivity"
             android:label="Workday report"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
 
         <receiver
-            android:name=".MyBroadcastReceiver"
+            android:name=".recievers.MyBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

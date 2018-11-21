@@ -1,11 +1,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="User settings"
+        android:title="@string/user_settings"
         >
 
         <ListPreference
-            android:title="Gender"
+            android:title="@string/gender"
             android:entries="@array/gender"
             android:entryValues="@array/gender"
             android:key="gender"
@@ -17,7 +17,7 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Age"
+            android:title="@string/age"
             />
 
         <EditTextPreference
@@ -26,7 +26,7 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Weight" />
+            android:title="@string/weight" />
 
         <EditTextPreference
             android:inputType="number"
@@ -34,23 +34,23 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Height" />
+            android:title="@string/height" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Reminders"
+        android:title="@string/reminders"
         >
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="workout_reminder"
-            android:title="Workout reminder"
-            android:summary="Select interval between workouts"/>
+            android:title="@string/workout_reminder"
+            android:summary="@string/workout_reminder_description"/>
 
         <ListPreference
             android:dependency="workout_reminder"
-            android:title="Select workout reminder interval"
+            android:title="@string/select_workout_reminder_interval"
             android:entries="@array/workout_reminder"
             android:entryValues="@array/workout_reminder_value"
             android:defaultValue="7200000"
@@ -59,46 +59,46 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="day_reminder"
-            android:title="Daily reminder"
-            android:summary="If daily reminder is enabled, workout notification will start on selected days"
+            android:title="@string/daily_reminder"
+            android:summary="@string/daily_reminder_description"
             />
         <MultiSelectListPreference
             android:dependency="day_reminder"
-            android:title="Select days"
+            android:title="@string/select_days"
             android:entries="@array/days"
             android:entryValues="@array/days_values"
             android:key="select_days"
-            android:summary="Select on which days you want to be reminded to start workout"
+            android:summary="@string/select_days_description"
             />
-        <net.trasim.workoutinwork.TimePreference
+        <net.trasim.workoutinwork.preferences.TimePreference
             android:dependency="day_reminder"
-            android:title="Daily reminder time"
+            android:title="@string/daily_reminder_time"
             android:key="select_days_time"
             android:defaultValue="08:00"
-            android:summary="Select time on which you want to start for selected days"
+            android:summary="@string/daily_reminder_time_description"
             />
         <SwitchPreference
             android:defaultValue="false"
             android:key="lunch_break"
-            android:title="Lunch break"
-            android:summary="If some workout should appear during selected period, it will be skipped automatically"/>
-        <net.trasim.workoutinwork.TimePreference
+            android:title="@string/lunch_break"
+            android:summary="@string/lunch_break_description"/>
+        <net.trasim.workoutinwork.preferences.TimePreference
             android:dependency="lunch_break"
-            android:title="Lunch break start"
+            android:title="@string/lunch_start"
             android:key="lunch_start"
             android:defaultValue="12:00"/>
-        <net.trasim.workoutinwork.TimePreference
+        <net.trasim.workoutinwork.preferences.TimePreference
             android:dependency="lunch_break"
-            android:title="Lunch break end"
+            android:title="@string/lunch_end"
             android:key="lunch_end"
             android:defaultValue="13:00"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Workout settings">
+        android:title="@string/workout_settings">
         <ListPreference
-            android:title="Number of exercises"
-            android:summary="Select number of exercises in one workout"
+            android:title="@string/number_of_exercises"
+            android:summary="@string/number_of_exercises_description"
             android:entries="@array/no_of_exercies"
             android:entryValues="@array/no_of_exercies"
             android:key="noOfExercises"

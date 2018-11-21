@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "3e346c9fe919f10e9c516e9a1541b98d",
+    "identityHash": "b26ef470687e17b3f7d6281a508fff12",
     "entities": [
       {
         "tableName": "Workdays",
@@ -118,7 +118,7 @@
       },
       {
         "tableName": "Exercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `namesk` TEXT, `heading` TEXT, `headingsk` TEXT, `description` TEXT, `descriptionsk` TEXT, `repetitions` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `img` TEXT, `enabled` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `nameSK` TEXT, `heading` TEXT, `headingSK` TEXT, `description` TEXT, `descriptionSK` TEXT, `repetitions` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `img` TEXT, `enabled` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -134,7 +134,7 @@
           },
           {
             "fieldPath": "nameSK",
-            "columnName": "namesk",
+            "columnName": "nameSK",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -146,7 +146,7 @@
           },
           {
             "fieldPath": "headingSK",
-            "columnName": "headingsk",
+            "columnName": "headingSK",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -158,7 +158,7 @@
           },
           {
             "fieldPath": "descriptionSK",
-            "columnName": "descriptionsk",
+            "columnName": "descriptionSK",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -198,7 +198,7 @@
       },
       {
         "tableName": "Tips",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `heading` TEXT NOT NULL, `headingsk` TEXT NOT NULL, `text` TEXT NOT NULL, `textsk` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `heading` TEXT NOT NULL, `headingSK` TEXT NOT NULL, `text` TEXT NOT NULL, `textSK` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -214,7 +214,7 @@
           },
           {
             "fieldPath": "headingSK",
-            "columnName": "headingsk",
+            "columnName": "headingSK",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -226,7 +226,7 @@
           },
           {
             "fieldPath": "textSK",
-            "columnName": "textsk",
+            "columnName": "textSK",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -243,7 +243,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3e346c9fe919f10e9c516e9a1541b98d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b26ef470687e17b3f7d6281a508fff12\")"
     ]
   }
 }

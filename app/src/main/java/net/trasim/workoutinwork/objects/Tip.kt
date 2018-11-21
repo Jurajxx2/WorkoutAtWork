@@ -13,11 +13,11 @@ class Tip {
 
     @ColumnInfo(name = "heading")
     var headingEN: String = ""
-    @ColumnInfo(name = "headingsk")
+    @ColumnInfo(name = "headingSK")
     var headingSK: String = ""
     @ColumnInfo(name = "text")
     var textEN: String = ""
-    @ColumnInfo(name = "textsk")
+    @ColumnInfo(name = "textSK")
     var textSK: String = ""
 
     constructor()

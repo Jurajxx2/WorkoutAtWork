@@ -1,4 +1,4 @@
-package net.trasim.workoutinwork
+package net.trasim.workoutinwork.activities
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -14,12 +14,11 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import net.trasim.workoutinwork.R
 import net.trasim.workoutinwork.database.AppDatabase
 import net.trasim.workoutinwork.decorators.EventDecorator
 import net.trasim.workoutinwork.decorators.OneDayDecorator
-import net.trasim.workoutinwork.objects.Workday
 import net.trasim.workoutinwork.objects.WorkdayMin
-import net.trasim.workoutinwork.objects.Workout
 import org.jetbrains.anko.*
 import java.util.*
 import kotlin.collections.ArrayList
